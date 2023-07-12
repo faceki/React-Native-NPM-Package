@@ -133,7 +133,7 @@ cd ios && pod install && cd ..
 ## USAGE
 
 ```jsx
-import FacekiApp from 'faceki-rnkyc';
+import FacekiApp from '@faceki/react-native-sdk';
 
 <>
   <FacekiApp
@@ -148,7 +148,7 @@ import FacekiApp from 'faceki-rnkyc';
 if you want to change images in the project
 
 ```jsx
-import FacekiApp from 'faceki-rnkyc';
+import FacekiApp from '@faceki/react-native-sdk';
 
 <>
   <FacekiApp
