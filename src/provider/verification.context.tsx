@@ -9,17 +9,20 @@ import {
   getAccessTokenFacekiAPI,
   getKYCRulesAPI,
   postMultiKYCVerificationAPI,
-  postSingleKYCVerificationAPI
+  postSingleKYCVerificationAPI,
 } from '../service/facekiAPI';
-import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
-import { HEADINGS, HEADING_TYPE } from '../wrapper/HEADINGS';
-import type { PropsWithChildren } from 'react';
+import {Alert, Linking, PermissionsAndroid, Platform} from 'react-native';
+import {HEADINGS, HEADING_TYPE} from '../wrapper/HEADINGS';
+import type {PropsWithChildren} from 'react';
 import ml from '@react-native-firebase/ml';
-import { MultiDocumentKYCResponseClass, SingleDocumentKYCResponseClass } from '../service/types/facekiresponse';
-import { Camera } from 'react-native-vision-camera';
+import {
+  MultiDocumentKYCResponseClass,
+  SingleDocumentKYCResponseClass,
+} from '../service/types/facekiresponse';
+import {Camera} from 'react-native-vision-camera';
 
 type userStepsType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
-export type modeType = 'user' | { exact: 'environment' };
+export type modeType = 'user' | {exact: 'environment'};
 
 const CONTENT = ['ID Card', 'Passport', 'Driving License'];
 
@@ -27,9 +30,9 @@ type ContentType = (typeof CONTENT)[number];
 
 export type ImgUrlsType = {
   [key in ContentType]: {
-    frontImage: { uri: string; path: string };
-    backImage: { uri: string; path: string };
-    selfie: { uri: string; path: string };
+    frontImage: {uri: string; path: string};
+    backImage: {uri: string; path: string};
+    selfie: {uri: string; path: string};
   };
 };
 
@@ -50,12 +53,12 @@ type ContextType = {
   handleSingleCapturePhoto: (step: number) => void;
   imgUrls: ImgUrlsType;
   finalResult:
-  | {
-    heading: string;
-    subText: string;
-    success: boolean;
-  }
-  | undefined;
+    | {
+        heading: string;
+        subText: string;
+        success: boolean;
+      }
+    | undefined;
   routeOfHandler: () => void;
   allowedKycDocuments: string[];
   isChecked: boolean;
@@ -63,19 +66,25 @@ type ContextType = {
   initializeClientIdAndSecret: (clientId: string, clientSecret: string) => void;
   loading: boolean;
   kycRuleError: boolean;
-  allowSingle: boolean
-  skipGuidanceScreens?: boolean
-  consenttermofuseLink?: string
+  allowSingle: boolean;
+  skipGuidanceScreens?: boolean;
+  consenttermofuseLink?: string;
   skipFirstScreen?: boolean;
   skipResultScreen?: boolean;
-
 };
 
 type VerificationProviderProps = PropsWithChildren<{
   clientId: string;
   clientSecret: string;
-  onError: (message: MultiDocumentKYCResponseClass | SingleDocumentKYCResponseClass | Error) => void;
-  onComplete: (message: MultiDocumentKYCResponseClass | SingleDocumentKYCResponseClass) => void;
+  onError: (
+    message:
+      | MultiDocumentKYCResponseClass
+      | SingleDocumentKYCResponseClass
+      | Error,
+  ) => void;
+  onComplete: (
+    message: MultiDocumentKYCResponseClass | SingleDocumentKYCResponseClass,
+  ) => void;
   skipGuidanceScreens?: boolean;
   consenttermofuseLink?: string;
   allowSingleOverride?: boolean;
@@ -84,15 +93,14 @@ type VerificationProviderProps = PropsWithChildren<{
   resultContent?: {
     success: {
       heading: string;
-      subHeading: string
-    },
+      subHeading: string;
+    };
     fail: {
       heading: string;
-      subHeading: string
-    }
-  }
-  singleVerificationDoc?: "Passport" | "ID Card" | "Driving License"
-
+      subHeading: string;
+    };
+  };
+  singleVerificationDoc?: 'Passport' | 'ID Card' | 'Driving License';
 }>;
 
 // Create the context
@@ -107,14 +115,12 @@ var RESULTS = [
     },
     error: {
       heading: 'Extra Verification Required',
-      subText:
-        'Couldn’t verify your identity, please contact us',
+      subText: 'Couldn’t verify your identity, please contact us',
       success: false,
     },
   },
 ];
 
-// Create a provider component to wrap the components that need access to the context
 export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   children,
   clientId,
@@ -127,11 +133,13 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   skipFirstScreen,
   skipResultScreen,
   resultContent,
-  singleVerificationDoc
+  singleVerificationDoc,
 }) => {
-  const [userStep, setUserStep] = useState<userStepsType>(skipFirstScreen ? 2 : 1);
+  const [userStep, setUserStep] = useState<userStepsType>(
+    skipFirstScreen ? 2 : 1,
+  );
   const webcamRef = useRef<any | null>(null);
-  const [allowSingle, setAllowSingle] = useState(false)
+  const [allowSingle, setAllowSingle] = useState(false);
   const [allowedKycDocuments, setAllowedKycDocuments] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
   const [clientCredentials, setClientCredentials] = useState({
@@ -142,14 +150,11 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   const [loading, setLoading] = useState(true);
   const [kycRuleError, setKycRuleError] = useState(false);
 
-
   useEffect(() => {
     if (skipFirstScreen) {
-      setUserStep(2)
-
+      setUserStep(2);
     }
-  }, [skipFirstScreen])
-
+  }, [skipFirstScreen]);
 
   const handleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -167,23 +172,21 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
 
   const [imgUrls, setImgUrls] = useState<ImgUrlsType>({
     ['ID Card']: {
-      frontImage: { uri: '', path: '' },
-      backImage: { uri: '', path: '' },
-      selfie: { uri: '', path: '' },
+      frontImage: {uri: '', path: ''},
+      backImage: {uri: '', path: ''},
+      selfie: {uri: '', path: ''},
     },
     ['Passport']: {
-      frontImage: { uri: '', path: '' },
-      backImage: { uri: '', path: '' },
-      selfie: { uri: '', path: '' },
+      frontImage: {uri: '', path: ''},
+      backImage: {uri: '', path: ''},
+      selfie: {uri: '', path: ''},
     },
     ['Driving License']: {
-      frontImage: { uri: '', path: '' },
-      backImage: { uri: '', path: '' },
-      selfie: { uri: '', path: '' },
+      frontImage: {uri: '', path: ''},
+      backImage: {uri: '', path: ''},
+      selfie: {uri: '', path: ''},
     },
   });
-
-
 
   const initializeClientIdAndSecret = (
     clientId: string,
@@ -198,26 +201,19 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   };
 
   useEffect(() => {
-    checkCameraPermission()
-
-  }, [])
+    checkCameraPermission();
+  }, []);
 
   const checkCameraPermission = async () => {
-    const cameraPermission = await Camera.getCameraPermissionStatus()
-    if (cameraPermission != "authorized") {
-      const newCameraPermission = await Camera.requestCameraPermission()
+    const cameraPermission = await Camera.getCameraPermissionStatus();
+    if (cameraPermission != 'authorized') {
+      const newCameraPermission = await Camera.requestCameraPermission();
       if (newCameraPermission === 'denied') await Linking.openSettings();
     }
-    return cameraPermission == "authorized" ;
-  }
+    return cameraPermission == 'authorized';
+  };
 
   useEffect(() => {
-    // ADD
-    // initializeClientIdAndSecret(
-    //   '43se7r1n0vd6muo2ua7la3a1ib',
-    //   'faevv80ms370h9i2cmi5mg818m8man1itrlpvnbtfu20ajntfg1',
-    // );
-
     if (!clientCredentials?.clientId) {
       console.error('Please provide client id and secret for faceki kyc');
     }
@@ -260,7 +256,7 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
       try {
         const rules = await getKYCRulesAPI();
 
-        var { data } = rules;
+        var {data} = rules;
 
         const rulesRespose = {
           livenessCheckType: data.livenessCheckType,
@@ -274,33 +270,29 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
           allowedKYCDocuments: data.allowedKycDocuments,
         };
         setAllowedKycDocuments(data.allowedKycDocuments as string[]);
-        if ((data.allowSingle || allowSingleOverride) && singleVerificationDoc) {
-          setAllowedKycDocuments([singleVerificationDoc])
-          setSelectedOption(singleVerificationDoc)
+        if (
+          (data.allowSingle || allowSingleOverride) &&
+          singleVerificationDoc
+        ) {
+          setAllowedKycDocuments([singleVerificationDoc]);
+          setSelectedOption(singleVerificationDoc);
         }
         if ((data.allowSingle || allowSingleOverride) && skipFirstScreen) {
-
-          setUserStep(2)
+          setUserStep(2);
         } else if (skipFirstScreen) {
-          setUserStep(3)
-
+          setUserStep(3);
         }
         // If Not Overwrite
-        if(!singleVerificationDoc)
-        {
+        if (!singleVerificationDoc) {
           setSelectedOption(data.allowedKycDocuments?.[0]);
         }
 
-
         if (allowSingleOverride) {
-          setAllowSingle(allowSingleOverride)
+          setAllowSingle(allowSingleOverride);
         } else {
-          setAllowSingle(data.allowSingle)
-
+          setAllowSingle(data.allowSingle);
         }
         setLoading(false);
-
-
 
         const copyLeftOptions = [...data.allowedKycDocuments];
         copyLeftOptions.shift(); // remove first element from an array
@@ -317,7 +309,6 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   }, [token]);
 
   const handleSingleCapturePhoto = async (step: number) => {
-
     const allowedToAccessCamera = await checkCameraPermission();
 
     // if not allowed to access camera dont proceed
@@ -325,21 +316,11 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
       return;
     }
     const imageSrc = await webcamRef?.current?.takePhoto?.({
-
-      enableShutterSound:false,
-      enableAutoStabilization:true,
+      enableShutterSound: false,
+      enableAutoStabilization: true,
     });
-    console.log(imageSrc, imageSrc.path)
-    // once user finishes once
-    // it will ask for second item in allowedKycDocuments
-    // will not move forward until all the items asked are clear
-    // we need to know if user is in the
 
     if (imageSrc.path) {
-      // const processingResult = await ml().cloudDocumentTextRecognizerProcessImage(imageSrc.path);
-      // console.log(processingResult)
-
-
       if (step === 5) {
         setImgUrls(prev => ({
           ...prev,
@@ -448,31 +429,30 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
             const response = await postMultiKYCVerificationAPI(formData);
             // console.log({response});
             if (response?.responseCode === 0) {
-              let responseWithType = Object.assign(new MultiDocumentKYCResponseClass(), response)
+              let responseWithType = Object.assign(
+                new MultiDocumentKYCResponseClass(),
+                response,
+              );
 
               onComplete && onComplete(responseWithType);
               if (resultContent) {
-                let result = RESULTS[0].success
-                result.heading = resultContent.success.heading
-                result.subText = resultContent.success.subHeading
+                let result = RESULTS[0].success;
+                result.heading = resultContent.success.heading;
+                result.subText = resultContent.success.subHeading;
                 setFinalResult(result);
-
               } else {
                 setFinalResult(RESULTS[0].success);
-
               }
 
               setUserStep(prev => (prev + 1) as userStepsType);
             } else {
               if (resultContent) {
-                let result = RESULTS[0].error
-                result.heading = resultContent.fail.heading
-                result.subText = resultContent.fail.subHeading
+                let result = RESULTS[0].error;
+                result.heading = resultContent.fail.heading;
+                result.subText = resultContent.fail.subHeading;
                 setFinalResult(result);
-
               } else {
                 setFinalResult(RESULTS[0].error);
-
               }
               onError && onError(response);
               setUserStep(prev => (prev + 1) as userStepsType);
@@ -481,33 +461,34 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
             onError && onError(err as Error);
 
             if (resultContent) {
-              let result = RESULTS[0].error
-              result.heading = resultContent.fail.heading
-              result.subText = resultContent.fail.subHeading
+              let result = RESULTS[0].error;
+              result.heading = resultContent.fail.heading;
+              result.subText = resultContent.fail.subHeading;
               setFinalResult(result);
-
             } else {
               setFinalResult(RESULTS[0].error);
-
             }
             setUserStep(prev => (prev + 1) as userStepsType);
           }
         } else {
           const formData = new FormData();
-          formData.append("doc_front_image", {
-            uri: imgUrls[selectedOption]?.frontImage?.path, type: 'image/jpeg',
-            name: `photo_front_image.jpg`
-          })
-          if (selectedOption != "Passport") {
-            formData.append("doc_back_image", {
-              uri: imgUrls[selectedOption]?.backImage?.path, type: 'image/jpeg',
-              name: `photo_front_image.jpg`
-            })
+          formData.append('doc_front_image', {
+            uri: imgUrls[selectedOption]?.frontImage?.path,
+            type: 'image/jpeg',
+            name: `photo_front_image.jpg`,
+          });
+          if (selectedOption != 'Passport') {
+            formData.append('doc_back_image', {
+              uri: imgUrls[selectedOption]?.backImage?.path,
+              type: 'image/jpeg',
+              name: `photo_front_image.jpg`,
+            });
           } else {
-            formData.append("doc_back_image", {
-              uri: imgUrls[selectedOption]?.frontImage?.path, type: 'image/jpeg',
-              name: `photo_front_image.jpg`
-            })
+            formData.append('doc_back_image', {
+              uri: imgUrls[selectedOption]?.frontImage?.path,
+              type: 'image/jpeg',
+              name: `photo_front_image.jpg`,
+            });
           }
           var Selfie_image = imageSrc.path;
           formData.append('selfie_image', {
@@ -521,62 +502,54 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
             await getTokenWithoutGettingRules();
             const response = await postSingleKYCVerificationAPI(formData);
             if (response?.responseCode === 0) {
-              let responseWithType = Object.assign(new SingleDocumentKYCResponseClass(), response)
+              let responseWithType = Object.assign(
+                new SingleDocumentKYCResponseClass(),
+                response,
+              );
 
               onComplete && onComplete(responseWithType);
 
               if (resultContent) {
-                let result = RESULTS[0].success
-                result.heading = resultContent.success.heading
-                result.subText = resultContent.success.subHeading
+                let result = RESULTS[0].success;
+                result.heading = resultContent.success.heading;
+                result.subText = resultContent.success.subHeading;
                 setFinalResult(result);
-
               } else {
                 setFinalResult(RESULTS[0].success);
-
               }
               if (!skipResultScreen) {
                 setUserStep(prev => (prev + 1) as userStepsType);
-
               } else {
-                console.log("Skipped Success")
+                console.log('Skipped Success');
               }
             } else {
-
               if (resultContent) {
-                let result = RESULTS[0].error
-                result.heading = resultContent.fail.heading
-                result.subText = resultContent.fail.subHeading
+                let result = RESULTS[0].error;
+                result.heading = resultContent.fail.heading;
+                result.subText = resultContent.fail.subHeading;
                 setFinalResult(result);
-
               } else {
                 setFinalResult(RESULTS[0].error);
-
               }
               onError && onError(response);
               setUserStep(prev => (prev + 1) as userStepsType);
             }
           } catch (err) {
-
             onError && onError(err as Error);
             if (resultContent) {
-              let result = RESULTS[0].error
-              result.heading = resultContent.fail.heading
-              result.subText = resultContent.fail.subHeading
+              let result = RESULTS[0].error;
+              result.heading = resultContent.fail.heading;
+              result.subText = resultContent.fail.subHeading;
               setFinalResult(result);
-
             } else {
               setFinalResult(RESULTS[0].error);
-
             }
             if (!skipResultScreen) {
               setUserStep(prev => (prev + 1) as userStepsType);
-
             } else {
-              console.log("Skipped Error")
+              console.log('Skipped Error');
             }
           }
-
         }
 
         return;
@@ -586,20 +559,16 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
     }
   };
 
-  // business logic
   const handlerUserSteps = () => {
     if (loading && userStep == 1) {
-      return
+      return;
     }
-    if (([3, 8].includes(userStep) && skipGuidanceScreens)) {
+    if ([3, 8].includes(userStep) && skipGuidanceScreens) {
       setUserStep(prev => (prev + 2) as userStepsType);
-      return
+      return;
     }
-
-
 
     if (!allowSingle && userStep === 1) {
-
       setUserStep(prev => (prev + 2) as userStepsType);
       return;
     }
@@ -608,10 +577,10 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         Alert.alert('Please select kyc type', '', [
           {
             text: 'Cancel',
-            onPress: () => { },
+            onPress: () => {},
             style: 'cancel',
           },
-          { text: 'OK', onPress: () => { } },
+          {text: 'OK', onPress: () => {}},
         ]);
         return;
       }
@@ -621,10 +590,10 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         Alert.alert('Please agree to terms and conditions', '', [
           {
             text: 'Cancel',
-            onPress: () => { },
+            onPress: () => {},
             style: 'cancel',
           },
-          { text: 'OK', onPress: () => { } },
+          {text: 'OK', onPress: () => {}},
         ]);
         return;
       }
@@ -650,10 +619,8 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
     if (leftOptions.length === 0 || allowSingle) {
       if (skipGuidanceScreens) {
         setUserStep(prev => (prev + 2) as userStepsType);
-
       } else {
         setUserStep(prev => (prev + 1) as userStepsType);
-
       }
       return;
     }
@@ -670,30 +637,27 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
 
   const goBackUserSteps = (index?: number) => {
     setUserStep((prev: any) => {
-
       if (index) {
-        return (prev - index) as userStepsType
-
+        return (prev - index) as userStepsType;
       } else {
-        return (prev - 1) as userStepsType
-
+        return (prev - 1) as userStepsType;
       }
-
     });
   };
 
+  // Function for getting Content
   const findOutStepContent = () => {
     if (userStep === 4 || userStep === 5 || userStep === 6 || userStep === 7) {
       const data = HEADINGS.filter(heading => heading.step === userStep)[0];
-      const newData = { ...data };
+      const newData = {...data};
       newData.heading = `${newData.heading} ${selectedOption}`;
       return newData;
     }
     return HEADINGS.filter(heading => heading.step === userStep)[0];
   };
 
+  // Function for selecting document
   const handleOptionChange = (event: string) => {
-
     setSelectedOption(event);
 
     const targetIndex = allowedKycDocuments.indexOf(event);
@@ -743,13 +707,11 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         skipGuidanceScreens,
         allowSingle,
         consenttermofuseLink,
-        skipFirstScreen
-
+        skipFirstScreen,
       }}>
       {children}
     </VerificationContext.Provider>
   );
 };
 
-// Create a custom hook to access the context value
 export const useMyStepsVerification = () => useContext(VerificationContext);

@@ -1,8 +1,8 @@
-import { View, Image, Pressable, Text } from 'react-native';
+import {View, Image, Pressable, Text} from 'react-native';
 import React from 'react';
-import { styles } from './styles';
-import { ImgUrlsType } from '../../provider/verification.context';
-import { globalStyles } from '../../../globalStyles';
+import {styles} from './styles';
+import {ImgUrlsType} from '../../provider/verification.context';
+import {globalStyles} from '../../../globalStyles';
 import overlayImage from '../../assets/faceki-overlay-camera.png';
 import Icon from 'react-native-vector-icons/Ionicons';
 import branding from '../../branding';
@@ -11,9 +11,9 @@ type props = {
   imgUrls: ImgUrlsType;
   selectedOption: string;
   routeOfHandler: () => void;
-  goBackUserSteps: (index?:number) => void;
+  goBackUserSteps: (index?: number) => void;
   userStep: number;
-    skipGuidanceScreens?: boolean;
+  skipGuidanceScreens?: boolean;
   findOutStepContent: () => {
     step: number;
     heading: string;
@@ -40,7 +40,7 @@ const ClarityCheck = ({
   goBackUserSteps,
   userStep,
   skipGuidanceScreens,
-  findOutStepContent
+  findOutStepContent,
 }: props) => {
   let userImage =
     userStep === 8
@@ -56,87 +56,93 @@ const ClarityCheck = ({
     <>
       <View style={styles.overlayContainer}>
         <Image
-
           source={{
             uri: userImage.path,
           }}
-          style={styles.overlayImage} resizeMode="cover" />
-
+          style={styles.overlayImage}
+          resizeMode="cover"
+        />
       </View>
       <View style={styles.overlayContainer}>
-        <Image source={overlayImage} style={styles.overlayImage} resizeMode="cover" />
-
+        <Image
+          source={overlayImage}
+          style={styles.overlayImage}
+          resizeMode="cover"
+        />
       </View>
       <View style={styles.topContent}>
-          <Pressable
-            onPress={() => { skipGuidanceScreens && userStep != 7 ? goBackUserSteps(2) : goBackUserSteps() }}
-            style={({ pressed }) => pressed && styles.opacity}>
-            <Icon
-              name="arrow-back"
-              size={30}
-              color={"white"}
-            />
-          </Pressable>
+        <Pressable
+          onPress={() => {
+            skipGuidanceScreens && userStep != 7
+              ? goBackUserSteps(2)
+              : goBackUserSteps();
+          }}
+          style={({pressed}) => pressed && styles.opacity}>
+          <Icon name="arrow-back" size={30} color={'white'} />
+        </Pressable>
 
-          <View style={{alignItems:"center"}}>
-
-
-            <Text style={[ globalStyles.textMedium, {
-              color: branding.colors.primary
-            }]}>
-              {findOutStepContent()?.heading}
-            </Text>
-            <Text style={[ globalStyles.textMedium, { color: "white" }]}>
-              {findOutStepContent()?.subHeading}
-          
-            </Text>
-            <Text style={[ globalStyles.textMedium, {   color: branding.colors.primary,marginTop:30 }]}>
+        <View style={{alignItems: 'center'}}>
+          <Text
+            style={[
+              globalStyles.textMedium,
+              {
+                color: branding.colors.primary,
+              },
+            ]}>
+            {findOutStepContent()?.heading}
+          </Text>
+          <Text style={[globalStyles.textMedium, {color: 'white'}]}>
+            {findOutStepContent()?.subHeading}
+          </Text>
+          <Text
+            style={[
+              globalStyles.textMedium,
+              {color: branding.colors.primary, marginTop: 30},
+            ]}>
             {userStep === 7 ? 'BACK SIDE' : 'FRONT SIDE'}
-          
-            </Text>
-
-
-          </View>
-
-          <Pressable style={({ pressed }) => pressed && styles.opacity}>
-            <Icon
-              name="information-circle-outline"
-              size={30}
-              style={{ opacity: 0 }}
-            // color={branding.colors.textDefault}
-            />
-          </Pressable>
-
-       
+          </Text>
         </View>
+
+        <Pressable style={({pressed}) => pressed && styles.opacity}>
+          <Icon
+            name="information-circle-outline"
+            size={30}
+            style={{opacity: 0}}
+            // color={branding.colors.textDefault}
+          />
+        </Pressable>
+      </View>
 
       <View style={styles.captureButtonContainer}>
         <View style={styles.buttonRow}>
-         <Pressable
-          style={({pressed}) =>
-            pressed ? [styles.cta, styles.opacity] : styles.cta
-          }
-          onPress={routeOfHandler}>
-          <Text style={[styles.ctaText, globalStyles.textMedium]}>
-            Looks Good
-          </Text>
-        </Pressable>
           <Pressable
-            style={({ pressed }) =>
+            style={({pressed}) =>
+              pressed ? [styles.cta, styles.opacity] : styles.cta
+            }
+            onPress={routeOfHandler}>
+            <Text style={[styles.ctaText, globalStyles.textMedium]}>
+              Looks Good
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({pressed}) =>
               pressed ? [styles.retake, styles.opacity] : styles.retake
             }
-            onPress={()=>{goBackUserSteps()}}
-            
-            >
-            <Text style={[styles.retakeButtonText, globalStyles.textMedium, { color: "white" }]}>
+            onPress={() => {
+              goBackUserSteps();
+            }}>
+            <Text
+              style={[
+                styles.retakeButtonText,
+                globalStyles.textMedium,
+                {color: 'white'},
+              ]}>
               Retake the photo
             </Text>
           </Pressable>
         </View>
       </View>
- 
     </>
-
   );
 };
 

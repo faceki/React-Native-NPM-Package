@@ -23,7 +23,7 @@ type props = {
   allowedKycDocuments: string[];
   loading: boolean;
   kycRuleError: boolean;
-  selectedOption:string
+  selectedOption: string;
 };
 
 const KYCForm = ({
@@ -31,9 +31,12 @@ const KYCForm = ({
   allowedKycDocuments,
   loading,
   kycRuleError,
-  selectedOption
+  selectedOption,
 }: props) => {
-  const [selectedIndex, setIndex] = useState(allowedKycDocuments?.find( x => x == selectedOption) || allowedKycDocuments[0] );
+  const [selectedIndex, setIndex] = useState(
+    allowedKycDocuments?.find(x => x == selectedOption) ||
+      allowedKycDocuments[0],
+  );
 
   const handleChange = (event: any) => {
     setIndex(event);
@@ -58,7 +61,7 @@ const KYCForm = ({
         <Text style={[styles.error, globalStyles.textBold]}>Server error</Text>
       )}
       {allowedKycDocuments?.map(content => (
-        <View  style={styles.box} key={content}>
+        <View style={styles.box} key={content}>
           <CheckBox
             checked={selectedIndex === content}
             onPress={() => handleChange(content)}

@@ -1,12 +1,16 @@
-import { Text, View, Pressable, Image } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { styles } from './styles';
+import {Text, View, Pressable, Image} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {styles} from './styles';
 
-import { globalStyles } from '../../../globalStyles';
+import {globalStyles} from '../../../globalStyles';
 import CaptureButton from '../../design-system/capture-button/capture-button.component';
 import FlipButton from '../../design-system/flip-button/flip-button.component';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Camera, frameRateIncluded, useCameraDevices } from 'react-native-vision-camera';
+import {
+  Camera,
+  frameRateIncluded,
+  useCameraDevices,
+} from 'react-native-vision-camera';
 
 type props = {
   webcamRef: React.MutableRefObject<any>;
@@ -41,163 +45,124 @@ const CaptureUserWebcam = ({
   userStep,
   goBackUserSteps,
   findOutStepContent,
-  skipGuidanceScreens
-
+  skipGuidanceScreens,
 }: props) => {
   const devices: any = useCameraDevices();
-  const [device, setDevice] = useState(devices.back)
+  const [device, setDevice] = useState(devices.back);
   useEffect(() => {
     if (devices) {
-      setDevice(devices.back)
-
+      setDevice(devices.back);
     }
-
-  }, [devices])
+  }, [devices]);
   const flipCamera = () => {
     if (device == devices.front) {
-      setDevice(devices.back)
+      setDevice(devices.back);
     } else {
-      setDevice(devices.front)
+      setDevice(devices.front);
     }
-
-  }
-
-
+  };
 
   return (
+    <View key="main" style={{flex: 1}}>
+      {/* Camera Screen */}
 
-    <View key="main" style={{ flex: 1 }}>
-      {device && <Camera
-        style={[styles.overlayContainer, { flex: 1, width: '100%', zIndex: 1 }]}
-        device={device}
-        isActive={true}
-        ref={webcamRef}
-        photo={true}
-        video={true}
-      />}
-      <View key="imageContain" style={[styles.overlayContainer, { position: 'absolute', top: 0, left: 0, zIndex: 1 }]}>
-        <Image key="overlayImage" source={overlayImage} style={styles.overlayImage} resizeMode="cover" />
+      {device && (
+        <Camera
+          style={[styles.overlayContainer, {flex: 1, width: '100%', zIndex: 1}]}
+          device={device}
+          isActive={true}
+          ref={webcamRef}
+          photo={true}
+          video={true}
+        />
+      )}
 
+      {/* Overlay Image Screen */}
+      <View
+        key="imageContain"
+        style={[
+          styles.overlayContainer,
+          {position: 'absolute', top: 0, left: 0, zIndex: 1},
+        ]}>
+        <Image
+          key="overlayImage"
+          source={overlayImage}
+          style={styles.overlayImage}
+          resizeMode="cover"
+        />
       </View>
+
+      {/* Header Component */}
 
       <View key="topContent" style={styles.topContent}>
         <Pressable
-          key={"gobackButton"}
-          onPress={() => { skipGuidanceScreens && userStep != 7 ? goBackUserSteps(2) : goBackUserSteps() }}
-          style={({ pressed }) => pressed && styles.opacity}>
-          <Icon
-            name="arrow-back"
-            size={30}
-            color={"white"}
-          />
+          key={'gobackButton'}
+          onPress={() => {
+            skipGuidanceScreens && userStep != 7
+              ? goBackUserSteps(2)
+              : goBackUserSteps();
+          }}
+          style={({pressed}) => pressed && styles.opacity}>
+          <Icon name="arrow-back" size={30} color={'white'} />
         </Pressable>
 
-        <View key={"con"} style={{ alignItems: "center" }}>
-
-
-          <Text key={"heading1"} style={[styles.heading, globalStyles.textMedium, {
-            color: branding.colors.primary
-          }]}>
+        <View key={'con'} style={{alignItems: 'center'}}>
+          <Text
+            key={'heading1'}
+            style={[
+              styles.heading,
+              globalStyles.textMedium,
+              {
+                color: branding.colors.primary,
+              },
+            ]}>
             {findOutStepContent()?.heading}
           </Text>
-          <Text key={"heading2"} style={[styles.subheading, globalStyles.textMedium, { color: "white" }]}>
+          <Text
+            key={'heading2'}
+            style={[
+              styles.subheading,
+              globalStyles.textMedium,
+              {color: 'white'},
+            ]}>
             {findOutStepContent()?.subHeading}
-
           </Text>
-          <Text key={"subtitle"} style={[styles.subheading, globalStyles.textMedium, { color: branding.colors.primary, marginTop: 30 }]}>
+          <Text
+            key={'subtitle'}
+            style={[
+              styles.subheading,
+              globalStyles.textMedium,
+              {color: branding.colors.primary, marginTop: 30},
+            ]}>
             {userStep === 7 ? 'BACK SIDE' : 'FRONT SIDE'}
-
           </Text>
-
-
         </View>
 
-        <Pressable key={"info"} style={({ pressed }) => pressed && styles.opacity}>
+        <Pressable
+          key={'info'}
+          style={({pressed}) => pressed && styles.opacity}>
           <Icon
             name="information-circle-outline"
             size={30}
-            style={{ opacity: 0 }}
-          // color={branding.colors.textDefault}
+            style={{opacity: 0}}
           />
         </Pressable>
-
-
       </View>
 
+      {/* Footer Component */}
 
-      <View key="bottomContent" style={[styles.captureButtonContainer, { zIndex: 9999 }]}>
+      <View
+        key="bottomContent"
+        style={[styles.captureButtonContainer, {zIndex: 9999}]}>
         <View style={styles.buttonRow}>
-          <View key={"flip"} style={styles.flipButtonWrapper}>
+          <View key={'flip'} style={styles.flipButtonWrapper}>
             <FlipButton onClick={flipCamera} />
           </View>
-          <View key={"capture"} style={styles.captureButtonWrapper}>
+          <View key={'capture'} style={styles.captureButtonWrapper}>
             <CaptureButton onClick={() => handleSingleCapturePhoto(userStep)} />
           </View>
         </View>
       </View>
-
-      {/* <Camera style={[styles.overlayContainer, { flex: 1, width: '100%', zIndex: 1 }]} ref={webcamRef} cameraType={cameraMode} resetFocusWhenMotionDetected={true} />
-      <View key="imageContain" style={[styles.overlayContainer, { position: 'absolute', top: 0, left: 0, zIndex: 1 }]}>
-        <Image key="overlayImage" source={overlayImage} style={styles.overlayImage} resizeMode="cover" />
-
-      </View>
-
-      <View key="topContent" style={styles.topContent}>
-        <Pressable
-          key={"gobackButton"}
-          onPress={() => { skipGuidanceScreens && userStep != 7 ? goBackUserSteps(2) : goBackUserSteps() }}
-          style={({ pressed }) => pressed && styles.opacity}>
-          <Icon
-            name="arrow-back"
-            size={30}
-            color={"white"}
-          />
-        </Pressable>
-
-        <View key={"con"} style={{ alignItems: "center" }}>
-
-
-          <Text key={"heading1"} style={[styles.heading, globalStyles.textMedium, {
-            color: branding.colors.primary
-          }]}>
-            {findOutStepContent()?.heading}
-          </Text>
-          <Text key={"heading2"} style={[styles.subheading, globalStyles.textMedium, { color: "white" }]}>
-            {findOutStepContent()?.subHeading}
-
-          </Text>
-          <Text key={"subtitle"} style={[styles.subheading, globalStyles.textMedium, { color: branding.colors.primary, marginTop: 30 }]}>
-            {userStep === 7 ? 'BACK SIDE' : 'FRONT SIDE'}
-
-          </Text>
-
-
-        </View>
-
-        <Pressable key={"info"} style={({ pressed }) => pressed && styles.opacity}>
-          <Icon
-            name="information-circle-outline"
-            size={30}
-            style={{ opacity: 0 }}
-          // color={branding.colors.textDefault}
-          />
-        </Pressable>
-
-
-      </View>
-
-
-      <View key="bottomContent" style={[styles.captureButtonContainer, { zIndex: 9999 }]}>
-        <View style={styles.buttonRow}>
-          <View key={"flip"} style={styles.flipButtonWrapper}>
-            <FlipButton onClick={flipCamera} />
-          </View>
-          <View key={"capture"} style={styles.captureButtonWrapper}>
-            <CaptureButton onClick={() => handleSingleCapturePhoto(userStep)} />
-          </View>
-        </View>
-      </View> */}
-
     </View>
   );
 };

@@ -1,14 +1,18 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './styles';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {styles} from './styles';
 import Header from '../header/header.component';
 import Footer from '../footer/footer.component';
 import CaptureButton from '../../design-system/capture-button/capture-button.component';
 import FlipButton from '../../design-system/flip-button/flip-button.component';
-import { globalStyles } from '../../../globalStyles';
+import {globalStyles} from '../../../globalStyles';
 import branding from '../../branding';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Camera, frameRateIncluded, useCameraDevices } from 'react-native-vision-camera';
+import {
+  Camera,
+  frameRateIncluded,
+  useCameraDevices,
+} from 'react-native-vision-camera';
 
 type props = {
   webcamRef: React.MutableRefObject<any>;
@@ -22,7 +26,7 @@ type props = {
   handlerUserSteps: () => void;
   buttonText: (userStep: number) => any;
   handleSingleCapturePhoto: (step: number) => void;
-  skipGuidanceScreens?: boolean
+  skipGuidanceScreens?: boolean;
 };
 
 /**
@@ -49,86 +53,85 @@ const CaptureSelfie = ({
   handlerUserSteps,
   buttonText,
   handleSingleCapturePhoto,
-  skipGuidanceScreens
+  skipGuidanceScreens,
 }: props) => {
-
   const devices: any = useCameraDevices();
-  const [device,setDevice] = useState(devices.front)
+  const [device, setDevice] = useState(devices.front);
 
-  useEffect(()=>{
-    if(devices)
-    {
-      setDevice(devices.front)
-
+  useEffect(() => {
+    if (devices) {
+      setDevice(devices.front);
     }
+  }, [devices]);
 
-  },[devices])
-
-  const flipCamera = () =>{
-      if(device == devices.front){
-        setDevice(devices.back)
-      }else{
-        setDevice(devices.front)
-      }
-
-  }
-
+  const flipCamera = () => {
+    if (device == devices.front) {
+      setDevice(devices.back);
+    } else {
+      setDevice(devices.front);
+    }
+  };
 
   return (
     <View style={styles.container}>
+      {/* Camera Screen */}
+      {device && (
+        <Camera
+          style={[styles.camera]}
+          device={device}
+          isActive={true}
+          ref={webcamRef}
+          photo={true}
+          video={true}
+        />
+      )}
 
-      {device && <Camera
-        style={[styles.camera]}
-        device={device}
-        isActive={true}
-        ref={webcamRef}
-        photo={true}
-        video={true}
-      />}
-
-
-
-      {/* <Camera style={styles.camera} ref={webcamRef} cameraType={cameraMode} /> */}
+      {/* Oval Screen */}
       <View style={styles.blurredContainer} />
+      {/* Content Screen */}
       <View style={[styles.absoluteContainer, StyleSheet.absoluteFill]}>
-        <View style={{flex:1, flexDirection:"row", justifyContent:"space-between"}}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
           <Pressable
-            onPress={() => { skipGuidanceScreens ? goBackUserSteps(2) : goBackUserSteps() }}
-          // style={({ pressed }) => pressed && styles.opacity}
-          
-
+            onPress={() => {
+              skipGuidanceScreens ? goBackUserSteps(2) : goBackUserSteps();
+            }}
+            // style={({ pressed }) => pressed && styles.opacity}
           >
             <Icon
               name="arrow-back"
               size={30}
-              color={"white"}
-              style={{marginTop:10}}
+              color={'white'}
+              style={{marginTop: 10}}
             />
           </Pressable>
 
-          <View style={{ alignItems: "center", marginTop:20 }}>
-
-
-            <Text style={[styles.heading, globalStyles.textMedium, {
-              color: branding.colors.primary
-            }]}>
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <Text
+              style={[
+                styles.heading,
+                globalStyles.textMedium,
+                {
+                  color: branding.colors.primary,
+                },
+              ]}>
               {findOutStepContent()?.heading}
             </Text>
-            <Text style={[globalStyles.textMedium, { color: "white" }]}>
+            <Text style={[globalStyles.textMedium, {color: 'white'}]}>
               {findOutStepContent()?.subHeading}
-
             </Text>
-
-
-
           </View>
 
-          <Pressable style={({ pressed }) => pressed && styles.opacity}>
+          <Pressable style={({pressed}) => pressed && styles.opacity}>
             <Icon
               name="information-circle-outline"
               size={30}
-              style={{ opacity: 0 }}
-            // color={branding.colors.textDefault}
+              style={{opacity: 0}}
+              // color={branding.colors.textDefault}
             />
           </Pressable>
         </View>
@@ -142,7 +145,12 @@ const CaptureSelfie = ({
           </View>
           <View style={styles.centerContainer}>
             <CaptureButton onClick={() => handleSingleCapturePhoto(userStep)} />
-            <Text style={[styles.selfieHeading, globalStyles.textRegular,{color:"white"}]}>
+            <Text
+              style={[
+                styles.selfieHeading,
+                globalStyles.textRegular,
+                {color: 'white'},
+              ]}>
               Take a selfie
             </Text>
             <Text style={[styles.selfieSubHeading, globalStyles.textMedium]}>

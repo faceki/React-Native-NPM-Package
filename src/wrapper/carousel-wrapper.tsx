@@ -1,13 +1,13 @@
-import { useColorScheme, ScrollView, View } from 'react-native';
+import {useColorScheme, ScrollView, View} from 'react-native';
 import React from 'react';
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Footer from '../components/footer/footer.component';
 import Header from '../components/header/header.component';
-import { useMyStepsVerification } from '../provider/verification.context';
+import {useMyStepsVerification} from '../provider/verification.context';
 import CustomCarousel from '../components/carousel/carousel.component';
 import KYCForm from '../components/KYC-form/KYC-form.component';
-import { styles } from './styles';
+import {styles} from './styles';
 import RequirementsDocuments from '../components/requirements-documents/requirements-documents';
 import CaptureUserWebcam from '../components/capture-user-webcam/capture-user-webcam.component';
 import PassportPhotoGuide from '../components/passport-photo-guide/passport-photo-guide';
@@ -16,7 +16,7 @@ import SelfieGuide from '../components/selfie-guide/selfie-guide.component';
 import CaptureSelfie from '../components/capture-selfie/capture-selfie.component';
 import Loading from '../components/loading/loading.component';
 import Confirmation from '../components/confirmation/confirmation.component';
-import { SlideType } from '../../App';
+import {SlideType} from '../../App';
 import AnimationComponent from '../components/animation-container';
 
 type props = {
@@ -35,7 +35,7 @@ type props = {
  * @returns {JSX.Element} - The rendered component as a JSX element.
  */
 
-const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
+const CarouselWrapper = ({slides, logoURL, loadingURL}: props) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -63,21 +63,18 @@ const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
     allowSingle,
     consenttermofuseLink,
     skipFirstScreen,
-    skipResultScreen
+    skipResultScreen,
   } = useMyStepsVerification();
 
   const content = (userStep: number) => {
-
     // if (([4, 9].includes(userStep) && skipGuidanceScreens)) {
     //   handlerUserSteps()
     // }
 
-
-
     switch (userStep) {
       case 1:
         // return <CustomCarousel slides={slides} />;
-        return <AnimationComponent />
+        return <AnimationComponent />;
       case 2:
         return (
           <KYCForm
@@ -94,8 +91,9 @@ const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
             isChecked={isChecked}
             handleCheckbox={handleCheckbox}
             consenttermofuseLink={consenttermofuseLink}
-            selectedOption={allowSingle ? [selectedOption] : allowedKycDocuments}
-
+            selectedOption={
+              allowSingle ? [selectedOption] : allowedKycDocuments
+            }
           />
         );
       case 4:
@@ -103,15 +101,13 @@ const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
       case 5:
         return (
           <CaptureUserWebcam
-         
-      
             webcamRef={webcamRef}
             handleSingleCapturePhoto={handleSingleCapturePhoto}
             goBackUserSteps={goBackUserSteps}
             findOutStepContent={findOutStepContent}
             skipGuidanceScreens={skipGuidanceScreens}
             userStep={userStep}
-            key={"front"}
+            key={'front'}
           />
         );
       case 6:
@@ -130,14 +126,11 @@ const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
       case 7:
         return (
           <CaptureUserWebcam
-         
-   
             webcamRef={webcamRef}
             goBackUserSteps={goBackUserSteps}
             findOutStepContent={findOutStepContent}
             skipGuidanceScreens={skipGuidanceScreens}
-            key={"back"}
-
+            key={'back'}
             handleSingleCapturePhoto={handleSingleCapturePhoto}
             userStep={userStep}
           />
@@ -161,13 +154,11 @@ const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
         return (
           <CaptureSelfie
             webcamRef={webcamRef}
-     
             userStep={userStep}
             findOutStepContent={findOutStepContent}
             goBackUserSteps={goBackUserSteps}
             buttonText={buttonText}
             handlerUserSteps={handlerUserSteps}
-        
             handleSingleCapturePhoto={handleSingleCapturePhoto}
             skipGuidanceScreens
           />
@@ -203,59 +194,53 @@ const CarouselWrapper = ({ slides, logoURL, loadingURL }: props) => {
 
   return (
     <>
-      {!loading && <>
-
-        {![5, 6, 7, 8, 10].includes(userStep) && <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={[backgroundStyle]}
-          contentContainerStyle={
-            userStep !== 10 && userStep !== 11
-              ? styles.mainContainer
-              : styles.cameraContainer
-          }>
-          <Header
-            userStep={userStep}
-            findOutStepContent={findOutStepContent}
-            goBackUserSteps={goBackUserSteps}
-            allowSingle={allowSingle}
-            skipFirstScreen={skipFirstScreen}
-          />
-          {content(userStep)}
-          <Footer
-            onPress={handlerUserSteps}
-            buttonText={buttonText}
-            userStep={userStep}
-            logoURL={logoURL}
-          />
-        </ScrollView>}
-        {[5, 6, 7, 8, 10].includes(userStep) &&
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={[backgroundStyle]}
-            scrollEnabled={false}
-            contentContainerStyle={
-
-
-              styles.cameraContainer
-            }>
-
-            {content(userStep)}
-
-          </ScrollView>}
-      </>}
-      {
-        loading && <ScrollView
+      {!loading && (
+        <>
+          {![5, 6, 7, 8, 10].includes(userStep) && (
+            <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              style={[backgroundStyle]}
+              contentContainerStyle={
+                userStep !== 10 && userStep !== 11
+                  ? styles.mainContainer
+                  : styles.cameraContainer
+              }>
+              <Header
+                userStep={userStep}
+                findOutStepContent={findOutStepContent}
+                goBackUserSteps={goBackUserSteps}
+                allowSingle={allowSingle}
+                skipFirstScreen={skipFirstScreen}
+              />
+              {content(userStep)}
+              <Footer
+                onPress={handlerUserSteps}
+                buttonText={buttonText}
+                userStep={userStep}
+                logoURL={logoURL}
+              />
+            </ScrollView>
+          )}
+          {[5, 6, 7, 8, 10].includes(userStep) && (
+            <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              style={[backgroundStyle]}
+              scrollEnabled={false}
+              contentContainerStyle={styles.cameraContainer}>
+              {content(userStep)}
+            </ScrollView>
+          )}
+        </>
+      )}
+      {loading && (
+        <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={[backgroundStyle]}
           scrollEnabled={false}
-          contentContainerStyle={
-
-
-            styles.cameraContainer
-          }>
+          contentContainerStyle={styles.cameraContainer}>
           <AnimationComponent loading={true} />
         </ScrollView>
-      }
+      )}
     </>
   );
 };

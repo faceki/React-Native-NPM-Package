@@ -60,8 +60,6 @@ export const postMultiKYCVerificationAPI = async (body: FormData) => {
   } catch (err) {
     const error = err as unknown as Error;
     console.log(error, error.name, error.message);
-    // console.log('Status code:', error?.response?.status);
-    // console.log('Error message:', error?.response?.data?.message);
     throw err;
   }
 };
@@ -84,8 +82,6 @@ export const postSingleKYCVerificationAPI = async (body: FormData) => {
     console.log(err)
     const error = err as unknown as Error;
     console.log(error, error.name, error.message);
-    // console.log('Status code:', error?.response?.status);
-    // console.log('Error message:', error?.response?.data?.message);
     throw err;
   }
 };

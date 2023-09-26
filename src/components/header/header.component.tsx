@@ -14,9 +14,9 @@ type props = {
     heading: string;
     subHeading: string;
   };
-  goBackUserSteps: (index?:number) => void;
-  allowSingle:boolean
-  skipFirstScreen?:boolean
+  goBackUserSteps: (index?: number) => void;
+  allowSingle: boolean;
+  skipFirstScreen?: boolean;
 };
 
 /**
@@ -29,7 +29,13 @@ type props = {
  * @returns {JSX.Element} - The rendered component as a JSX element.
  */
 
-function Header({userStep, findOutStepContent, goBackUserSteps,allowSingle,skipFirstScreen}: props) {
+function Header({
+  userStep,
+  findOutStepContent,
+  goBackUserSteps,
+  allowSingle,
+  skipFirstScreen,
+}: props) {
   return (
     <>
       {userStep !== 10 && userStep !== 11 && userStep !== 12 && (
@@ -43,24 +49,23 @@ function Header({userStep, findOutStepContent, goBackUserSteps,allowSingle,skipF
             </View>
           )}
           {userStep !== 1 && (
-            <View style={styles.container} >
+            <View style={styles.container}>
               <Pressable
-            onPress={()=>{
-              if(userStep == 3 && !allowSingle)
-              {
-                goBackUserSteps(2)
-              }else{
-                goBackUserSteps()
-
-              }
-            
-            }}
-            style={({pressed}) => pressed && styles.opacity}>
-               {!((userStep == 2 || userStep == 3) && skipFirstScreen) && <Icon
-                  name="arrow-back"
-                  size={30}
-                  color={branding.colors.textDefault}
-                />}
+                onPress={() => {
+                  if (userStep == 3 && !allowSingle) {
+                    goBackUserSteps(2);
+                  } else {
+                    goBackUserSteps();
+                  }
+                }}
+                style={({pressed}) => pressed && styles.opacity}>
+                {!((userStep == 2 || userStep == 3) && skipFirstScreen) && (
+                  <Icon
+                    name="arrow-back"
+                    size={30}
+                    color={branding.colors.textDefault}
+                  />
+                )}
               </Pressable>
 
               <View>
@@ -80,7 +85,7 @@ function Header({userStep, findOutStepContent, goBackUserSteps,allowSingle,skipF
                 <Icon
                   name="information-circle-outline"
                   size={30}
-                  style={{opacity:0}}
+                  style={{opacity: 0}}
                   color={branding.colors.textDefault}
                 />
               </Pressable>

@@ -27,17 +27,29 @@ type props = {
 
 const Confirmation = ({finalResult}: props) => {
   return (
-    <View style={{flex:1,flexDirection:"column", justifyContent:"center",alignContent:"center"}}>
-      {
-        finalResult?.success &&    <LottieView source={require("../../assets/jsons/lottieSuccess.json")} autoPlay loop style={
-          {flex:1,maxHeight:400}
-        } />
-      }
-      {
-        !finalResult?.success &&    <LottieView source={require("../../assets/jsons/lottieFail.json")} autoPlay loop style={
-          {flex:1,maxHeight:400}
-        } />
-       }
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}>
+      {finalResult?.success && (
+        <LottieView
+          source={require('../../assets/jsons/lottieSuccess.json')}
+          autoPlay
+          loop
+          style={{flex: 1, maxHeight: 400}}
+        />
+      )}
+      {!finalResult?.success && (
+        <LottieView
+          source={require('../../assets/jsons/lottieFail.json')}
+          autoPlay
+          loop
+          style={{flex: 1, maxHeight: 400}}
+        />
+      )}
       <Text style={[styles.heading, globalStyles.textRegular]}>
         {[finalResult?.heading]}
       </Text>
