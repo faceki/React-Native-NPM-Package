@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
-
+import { getBranding } from './src/branding';
+getBranding
 export const globalStyles = StyleSheet.create({
   textRegular: {
-    fontFamily: 'Inter-Regular',
+    fontFamily: getBranding().colors.fontRegular,
     // fontWeight: 'bold',
   },
   textMedium: {
-    fontFamily: 'Inter-Medium',
+    fontFamily:  getBranding().colors.fontMedium,
   },
   textBold: {
-    fontFamily: 'Inter-Bold',
+    fontFamily:  getBranding().colors.fontBold,
   },
 });

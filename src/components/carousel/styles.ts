@@ -1,5 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 export const styles = StyleSheet.create({
   tinyLogo: {
@@ -12,14 +12,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
     fontSize: 26,
-    fontFamily: 'Inter',
+    fontFamily:  getBranding().colors.fontRegular,
   },
   subHeading: {
-    color: branding.colors.textSecondary,
+    color: getBranding().colors.textSecondary,
     fontSize: 12,
-    fontFamily: 'Inter',
+    fontFamily: getBranding().colors.fontRegular,
     fontWeight: '100',
   },
   container: {
@@ -46,10 +46,10 @@ export const styles = StyleSheet.create({
     marginLeft: 4,
   },
   activecircle: {
-    backgroundColor: branding.colors.primary,
+    backgroundColor: getBranding().colors.primary,
   },
   inactivecircle: {
-    backgroundColor: branding.colors.gray,
+    backgroundColor: ""
   },
   column: {
     display: 'flex',

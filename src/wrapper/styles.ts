@@ -1,6 +1,6 @@
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {StyleSheet, Dimensions, Platform, StatusBar} from 'react-native';
-import branding from '../branding';
+import  { getBranding } from '../branding';
 
 const {height, width} = Dimensions.get('window');
 const statusBarHeight = StatusBar.currentHeight ?? 0;
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     overflowY: 'scroll',
     display: 'flex',
     position: 'relative',
-    backgroundColor: branding.colors.background,
+    backgroundColor: getBranding().colors.background,
     width: Dimensions.get('screen').width / 1,
   },
   contentHeader: {
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     overflowY: 'scroll',
     display: 'flex',
     position: 'relative',
-    backgroundColor: branding.colors.background,
+    backgroundColor: getBranding().colors.background,
     width: Dimensions.get('screen').width / 1,
   },
 });

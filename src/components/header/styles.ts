@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 export const styles = StyleSheet.create({
   container: {
@@ -25,18 +26,18 @@ export const styles = StyleSheet.create({
     height: 58,
   },
   heading: {
-    fontFamily: 'Inter-Medium',
+    fontFamily: getBranding().colors.fontMedium,
     fontSize: 16,
     lineHeight: 58,
     letterSpacing: 0,
     textAlign: 'center',
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
   },
   subHeading: {
     fontSize: 12,
     letterSpacing: 0,
     textAlign: 'center',
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   opacity: {
     opacity: 0.3,

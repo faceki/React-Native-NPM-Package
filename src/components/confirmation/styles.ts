@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,13 +13,13 @@ export const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     paddingBottom: 20,
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
     textAlign: 'center',
   },
   subHeading: {
     fontSize: 14,
     textAlign: 'center',
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   icon: {
     paddingBottom: 20,

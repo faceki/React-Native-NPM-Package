@@ -2,7 +2,7 @@ import {Text, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import branding from '../../branding';
+import branding, {getBranding} from '../../branding';
 import {styles} from './styles';
 import {globalStyles} from '../../../globalStyles';
 import LottieView from 'lottie-react-native';
@@ -50,10 +50,28 @@ const Confirmation = ({finalResult}: props) => {
           style={{flex: 1, maxHeight: 400}}
         />
       )}
-      <Text style={[styles.heading, globalStyles.textRegular]}>
+      <Text
+        style={[
+          styles.heading,
+          globalStyles.textRegular,
+          {
+            fontFamily: getBranding().colors.fontRegular,
+
+            color: getBranding().colors.textDefault,
+          },
+        ]}>
         {[finalResult?.heading]}
       </Text>
-      <Text style={[styles.subHeading, globalStyles.textRegular]}>
+      <Text
+        style={[
+          styles.subHeading,
+          globalStyles.textRegular,
+          {
+            fontFamily: getBranding().colors.fontRegular,
+
+            color: getBranding().colors.textDefault,
+          },
+        ]}>
         {[finalResult?.subText]}
       </Text>
     </View>

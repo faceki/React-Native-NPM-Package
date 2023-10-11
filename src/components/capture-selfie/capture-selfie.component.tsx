@@ -6,7 +6,7 @@ import Footer from '../footer/footer.component';
 import CaptureButton from '../../design-system/capture-button/capture-button.component';
 import FlipButton from '../../design-system/flip-button/flip-button.component';
 import {globalStyles} from '../../../globalStyles';
-import branding from '../../branding';
+import {getBranding} from '../../branding';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
   Camera,
@@ -116,7 +116,7 @@ const CaptureSelfie = ({
                 styles.heading,
                 globalStyles.textMedium,
                 {
-                  color: branding.colors.primary,
+                  color: getBranding().colors.primary,
                 },
               ]}>
               {findOutStepContent()?.heading}
@@ -131,7 +131,7 @@ const CaptureSelfie = ({
               name="information-circle-outline"
               size={30}
               style={{opacity: 0}}
-              // color={branding.colors.textDefault}
+              // color={getBranding().colors.textDefault}
             />
           </Pressable>
         </View>

@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   brick: {
-    backgroundColor: branding.colors.primary,
+    backgroundColor: getBranding().colors.primary,
     width: width / 2.5,
     height: height / 24,
     borderTopLeftRadius: 6,
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   brickText: {
-    color: branding.colors.background,
+    color: getBranding().colors.background,
   },
   borderCamera: {
     borderColor: 'lightgray',
@@ -36,10 +37,10 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   heading: {
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   subheading: {
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
   },
   buttonContainer: {
     display: 'flex',
@@ -61,14 +62,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   captureBtn: {
-    backgroundColor: branding.colors.backgroundCaptureBtn,
+    backgroundColor: getBranding().colors.backgroundCaptureBtn,
     width: 70,
     height: 70,
     borderRadius: 50,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: branding.colors.primary,
+    borderColor: getBranding().colors.primary,
     borderWidth: 1,
   },
   right: {

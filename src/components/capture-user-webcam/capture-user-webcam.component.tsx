@@ -11,6 +11,7 @@ import {
   frameRateIncluded,
   useCameraDevices,
 } from 'react-native-vision-camera';
+import { getBranding } from '../../branding';
 
 type props = {
   webcamRef: React.MutableRefObject<any>;
@@ -113,7 +114,7 @@ const CaptureUserWebcam = ({
               styles.heading,
               globalStyles.textMedium,
               {
-                color: branding.colors.primary,
+                color: getBranding().colors.primary,
               },
             ]}>
             {findOutStepContent()?.heading}
@@ -132,7 +133,7 @@ const CaptureUserWebcam = ({
             style={[
               styles.subheading,
               globalStyles.textMedium,
-              {color: branding.colors.primary, marginTop: 30},
+              {color: getBranding().colors.primary, marginTop: 30},
             ]}>
             {userStep === 7 ? 'BACK SIDE' : 'FRONT SIDE'}
           </Text>

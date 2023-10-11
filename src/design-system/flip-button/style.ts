@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 export const styles = StyleSheet.create({
   flipButton: {
@@ -15,6 +16,6 @@ export const styles = StyleSheet.create({
   flipCamera: {
     fontSize: 12,
     textAlign: 'center',
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
 });

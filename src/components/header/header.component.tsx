@@ -2,8 +2,10 @@ import React from 'react';
 import {View, Image, Text, Pressable} from 'react-native';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import branding from '../../branding';
+// import branding from '../../branding';
 import {globalStyles} from '../../../globalStyles';
+import { getBranding } from '../../branding';
+
 
 const LOGO = '../../assets/logo.png';
 
@@ -63,7 +65,7 @@ function Header({
                   <Icon
                     name="arrow-back"
                     size={30}
-                    color={branding.colors.textDefault}
+                    color={getBranding().colors.textDefault}
                   />
                 )}
               </Pressable>
@@ -86,7 +88,7 @@ function Header({
                   name="information-circle-outline"
                   size={30}
                   style={{opacity: 0}}
-                  color={branding.colors.textDefault}
+                  color={getBranding().colors.textDefault}
                 />
               </Pressable>
             </View>

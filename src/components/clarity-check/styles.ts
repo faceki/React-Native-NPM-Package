@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -13,11 +14,11 @@ export const styles = StyleSheet.create({
     height: height / 2.3,
   },
   cta: {
-    backgroundColor: branding.colors.buttonColor,
+    backgroundColor: getBranding().colors.buttonColor,
     width: width / 2,
     height: 50,
     borderRadius: 4,
-    borderColor: branding.colors.primary,
+    borderColor: getBranding().colors.primary,
     borderWidth: 1,
     display: 'flex',
     justifyContent: 'center',
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ctaText: {
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
     textTransform: 'uppercase',
   },
   center: {
@@ -41,7 +42,7 @@ export const styles = StyleSheet.create({
     margin: 30,
   },
   retakeButtonText: {
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   opacity: {
     opacity: 0.3,

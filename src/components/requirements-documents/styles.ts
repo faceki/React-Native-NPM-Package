@@ -1,6 +1,7 @@
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 const screenDimensions = Dimensions.get('screen');
 
@@ -25,10 +26,10 @@ export const styles = StyleSheet.create({
   },
   boxTextLight: {
     fontSize: 12,
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   box: {
-    backgroundColor: branding.colors.backgroundSecondary,
+    backgroundColor: getBranding().colors.backgroundSecondary,
     height: screenDimensions.height / 18,
     width: screenDimensions.width / 1.16,
     borderRadius: 4,
@@ -44,15 +45,15 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   lign: {
-    backgroundColor: branding.colors.bullet,
+
     height: screenDimensions.height / 10,
     width: 3,
     borderRadius: 3,
   },
   bullet: {
-    fontFamily: 'Inter',
+    fontFamily: getBranding().colors.fontRegular,
     fontSize: 17,
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   topMargin: {
     paddingTop: 33,
@@ -71,10 +72,10 @@ export const styles = StyleSheet.create({
   },
   subHeading: {
     fontSize: 12,
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   note: {
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
     textDecorationLine: 'underline',
     fontSize: 14,
     marginLeft: 56,
@@ -82,7 +83,7 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
   },
   black: {
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
     textDecorationLine: 'none',
   },
 });

@@ -20,6 +20,7 @@ import {
   SingleDocumentKYCResponseClass,
 } from '../service/types/facekiresponse';
 import {Camera} from 'react-native-vision-camera';
+import { Branding } from '../service/types/interfaces';
 
 type userStepsType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 export type modeType = 'user' | {exact: 'environment'};
@@ -71,6 +72,20 @@ type ContextType = {
   consenttermofuseLink?: string;
   skipFirstScreen?: boolean;
   skipResultScreen?: boolean;
+  branding?:Branding
+  resultContent?: {
+    success: {
+      heading: string;
+      subHeading: string;
+    };
+    fail: {
+      heading: string;
+      subHeading: string;
+    },
+    verification:{
+      heading: string;
+    }
+  };
 };
 
 type VerificationProviderProps = PropsWithChildren<{
@@ -94,13 +109,17 @@ type VerificationProviderProps = PropsWithChildren<{
     success: {
       heading: string;
       subHeading: string;
-    };
+    },
     fail: {
       heading: string;
       subHeading: string;
-    };
+    },
+    verification:{
+      heading: string;
+    }
   };
   singleVerificationDoc?: 'Passport' | 'ID Card' | 'Driving License';
+  branding?:Branding
 }>;
 
 // Create the context
@@ -134,6 +153,8 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   skipResultScreen,
   resultContent,
   singleVerificationDoc,
+  branding
+
 }) => {
   const [userStep, setUserStep] = useState<userStepsType>(
     skipFirstScreen ? 2 : 1,
@@ -320,6 +341,8 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
       enableAutoStabilization: true,
     });
 
+
+
     if (imageSrc.path) {
       if (step === 5) {
         setImgUrls(prev => ({
@@ -368,12 +391,12 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
                 id_back_image = imgUrls[content].backImage.path;
                 id_front_image = imgUrls[content].frontImage.path;
                 formData.append('id_back_image', {
-                  uri: id_back_image,
+                  uri:  Platform.OS == "android" ?  'file://' +  id_back_image :id_back_image ,
                   type: 'image/jpeg',
                   name: `photo_id_back_image.jpg`,
                 });
                 formData.append('id_front_image', {
-                  uri: id_front_image,
+                  uri: Platform.OS == "android" ?  'file://' +  id_front_image : id_front_image,
                   type: 'image/jpeg',
                   name: `photo_id_front_image.jpg`,
                 });
@@ -383,12 +406,12 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
                 pp_front_image = imgUrls[content].frontImage.path;
 
                 formData.append('pp_back_image', {
-                  uri: pp_back_image,
+                  uri:  Platform.OS == "android" ?  'file://' + pp_back_image :pp_back_image,
                   type: 'image/jpeg',
                   name: `photo_pp_back_image.jpg`,
                 });
                 formData.append('pp_front_image', {
-                  uri: pp_front_image,
+                  uri:Platform.OS == "android" ?  'file://' + pp_front_image:pp_front_image,
                   type: 'image/jpeg',
                   name: `photo_pp_front_image.jpg`,
                 });
@@ -400,12 +423,12 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
                 // const dlFrontBlob = await getBlob(dl_front_image);
 
                 formData.append('dl_back_image', {
-                  uri: `${dl_back_image}`,
+                  uri: Platform.OS == "android" ?  'file://' + `${dl_back_image}` : `${dl_back_image}`,
                   type: 'image/jpeg',
                   name: `photo_dl_back_image.jpg`,
                 });
                 formData.append('dl_front_image', {
-                  uri: `${dl_front_image}`,
+                  uri: Platform.OS == "android" ?  'file://' + `${dl_front_image}`: `${dl_front_image}`,
                   type: 'image/jpeg',
                   name: `photo_dl_front_image.jpg`,
                 });
@@ -417,7 +440,7 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
           // const selfieBlob = await getBlob(Selfie_image);
 
           formData.append('selfie_image', {
-            uri: `${Selfie_image}`,
+            uri: Platform.OS == "android" ?  'file://' + `${Selfie_image}`: `${Selfie_image}`,
             type: 'image/jpeg',
             name: `photo_selfie_image.jpg`,
           });
@@ -473,26 +496,26 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         } else {
           const formData = new FormData();
           formData.append('doc_front_image', {
-            uri: imgUrls[selectedOption]?.frontImage?.path,
+            uri: Platform.OS == "android" ?  'file://' +  imgUrls[selectedOption]?.frontImage?.path : imgUrls[selectedOption]?.frontImage?.path,
             type: 'image/jpeg',
             name: `photo_front_image.jpg`,
           });
           if (selectedOption != 'Passport') {
             formData.append('doc_back_image', {
-              uri: imgUrls[selectedOption]?.backImage?.path,
+              uri: Platform.OS == "android" ?  'file://' +  imgUrls[selectedOption]?.backImage?.path: imgUrls[selectedOption]?.backImage?.path,
               type: 'image/jpeg',
               name: `photo_front_image.jpg`,
             });
           } else {
             formData.append('doc_back_image', {
-              uri: imgUrls[selectedOption]?.frontImage?.path,
+              uri: Platform.OS == "android" ?  'file://' + imgUrls[selectedOption]?.frontImage?.path :  imgUrls[selectedOption]?.frontImage?.path,
               type: 'image/jpeg',
               name: `photo_front_image.jpg`,
             });
           }
           var Selfie_image = imageSrc.path;
           formData.append('selfie_image', {
-            uri: `${Selfie_image}`,
+            uri: Platform.OS == "android" ?  'file://' +`${Selfie_image}` :`${Selfie_image}` ,
             type: 'image/jpeg',
             name: `photo_selfie_image.jpg`,
           });
@@ -708,6 +731,9 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         allowSingle,
         consenttermofuseLink,
         skipFirstScreen,
+        branding,
+        resultContent
+
       }}>
       {children}
     </VerificationContext.Provider>

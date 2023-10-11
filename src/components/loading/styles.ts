@@ -1,12 +1,13 @@
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 const {height, width} = Dimensions.get('screen');
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: branding.colors.dark,
+    backgroundColor: getBranding().colors.dark,
     height: '100%',
     width: '100%',
     display: 'flex',
@@ -14,7 +15,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: branding.colors.light,
+    color: getBranding().colors.light,
     fontSize: 24,
   },
   logo: {

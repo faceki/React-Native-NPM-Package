@@ -1,12 +1,13 @@
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+import {getBranding} from '../../branding';
 
 const screenDimensions = Dimensions.get('screen');
+var branding = getBranding()
 
 export const styles = StyleSheet.create({
   box: {
-    backgroundColor: branding.colors.backgroundSecondary,
+    backgroundColor: branding?.colors?.backgroundSecondary,
     height: screenDimensions.height / 8,
     width: screenDimensions.width / 1.2,
     borderRadius: 4,
@@ -24,7 +25,7 @@ export const styles = StyleSheet.create({
   boxText: {
     fontWeight: 'bold',
     fontSize: 14,
-    color: branding.colors.textDefault,
+    color: branding?.colors?.textDefault,
   },
   tinyLogo: {
     width: 40,
@@ -36,20 +37,20 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   containerCheckbox: {
-    backgroundColor: branding.colors.checkboxBackground,
+    backgroundColor: branding?.colors?.backgroundSecondary,
     borderRadius: 50,
   },
   wrapper: {
     color: 'red',
   },
   error: {
-    color: branding.colors.danger,
+    color: branding?.colors?.danger,
     fontSize: 20,
   },
   loadingContainer: {
     height: '50%',
   },
   loading: {
-    color: branding.colors.textDefault,
+    color: branding?.colors?.textDefault,
   },
 });

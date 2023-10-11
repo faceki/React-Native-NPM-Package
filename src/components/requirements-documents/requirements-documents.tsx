@@ -6,8 +6,9 @@ const IDCARD = '../../assets/id1.png';
 const SELFIE = '../../assets/selfie.png';
 const IDCARDBACK = '../../assets/id_card_back.png';
 import {CheckBox} from '@rneui/themed';
-import branding from '../../branding';
+// import branding from '../../branding';
 import {globalStyles} from '../../../globalStyles';
+import { getBranding } from '../../branding';
 
 /**
  * A component for displaying the required documents for the KYC process and allowing the user to confirm their consent to the terms of use.
@@ -94,7 +95,7 @@ const RequirementsDocuments = ({
             wrapperStyle={styles.checkbox}
             size={24}
             containerStyle={styles.transparent}
-            checkedColor={branding.colors.primary}
+            checkedColor={getBranding().colors.primary}
           />
           {consenttermofuseLink && (
             <Text style={styles.subHeading}>

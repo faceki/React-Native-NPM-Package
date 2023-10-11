@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 const {height, width} = Dimensions.get('screen');
 const oval1Width = width * 0.5,
@@ -90,16 +91,16 @@ export const styles = StyleSheet.create({
     width: width / 5,
   },
   selfieHeading: {
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   selfieSubHeading: {
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
   },
   heading: {
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
   subheading: {
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
   },  opacity: {
     opacity: 0.3,
   },

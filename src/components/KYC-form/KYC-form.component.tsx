@@ -2,8 +2,10 @@ import {Image, Text, View, ActivityIndicator, Platform} from 'react-native';
 import {useState} from 'react';
 import {styles} from './styles';
 import {CheckBox} from '@rneui/themed';
-import branding from '../../branding';
+// import branding from '../../branding';
 import {globalStyles} from '../../../globalStyles';
+import { useMyStepsVerification } from '../../provider/verification.context';
+import { getBranding } from '../../branding';
 
 const IDCARD = '../../assets/id1.png';
 
@@ -37,7 +39,7 @@ const KYCForm = ({
     allowedKycDocuments?.find(x => x == selectedOption) ||
       allowedKycDocuments[0],
   );
-
+  let context = useMyStepsVerification()
   const handleChange = (event: any) => {
     setIndex(event);
     handleOptionChange(event);
@@ -69,7 +71,7 @@ const KYCForm = ({
             uncheckedIcon="circle-o"
             style={styles.checkedIcon}
             containerStyle={styles.containerCheckbox}
-            checkedColor={branding.colors.primary}
+            checkedColor={getBranding()?.colors?.primary}
           />
           <Image style={styles.tinyLogo} source={require(IDCARD)} />
           <Text style={[styles.boxText, globalStyles.textRegular]}>

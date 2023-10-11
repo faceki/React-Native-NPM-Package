@@ -5,7 +5,9 @@ import {ImgUrlsType} from '../../provider/verification.context';
 import {globalStyles} from '../../../globalStyles';
 import overlayImage from '../../assets/faceki-overlay-camera.png';
 import Icon from 'react-native-vector-icons/Ionicons';
-import branding from '../../branding';
+// import branding from '../../branding';
+import {Platform} from 'react-native';
+import { getBranding } from '../../branding';
 
 type props = {
   imgUrls: ImgUrlsType;
@@ -57,7 +59,7 @@ const ClarityCheck = ({
       <View style={styles.overlayContainer}>
         <Image
           source={{
-            uri: userImage.path,
+            uri: Platform.OS == "android" ?  'file://' + userImage.path : userImage.path,
           }}
           style={styles.overlayImage}
           resizeMode="cover"
@@ -86,7 +88,7 @@ const ClarityCheck = ({
             style={[
               globalStyles.textMedium,
               {
-                color: branding.colors.primary,
+                color: getBranding().colors.primary,
               },
             ]}>
             {findOutStepContent()?.heading}
@@ -97,7 +99,7 @@ const ClarityCheck = ({
           <Text
             style={[
               globalStyles.textMedium,
-              {color: branding.colors.primary, marginTop: 30},
+              {color: getBranding().colors.primary, marginTop: 30},
             ]}>
             {userStep === 7 ? 'BACK SIDE' : 'FRONT SIDE'}
           </Text>
@@ -108,7 +110,7 @@ const ClarityCheck = ({
             name="information-circle-outline"
             size={30}
             style={{opacity: 0}}
-            // color={branding.colors.textDefault}
+            // color={getBranding().colors.textDefault}
           />
         </Pressable>
       </View>

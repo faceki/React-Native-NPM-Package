@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 export const styles = StyleSheet.create({
   row: {
@@ -13,20 +14,20 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     objectFit: 'contain',
-    marginTop: 40,
+    // marginTop: 3,
   },
   cta: {
     width: 150,
     height: 40,
     borderRadius: 4,
-    backgroundColor: branding.colors.primary,
+    backgroundColor: getBranding().colors.primary,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
   },
   ctaText: {
-    color: branding.colors.background,
+    color: getBranding().colors.background,
   },
   icon: {
     paddingLeft: 10,

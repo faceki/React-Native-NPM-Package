@@ -1,5 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
+
 
 const {width, height} = Dimensions.get('screen');
 
@@ -19,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   infoHeading: {
     fontSize: 16,
-    color: branding.colors.primary,
+    color: getBranding().colors.primary,
     paddingBottom: 12,
   },
   row: {
@@ -29,6 +31,6 @@ export const styles = StyleSheet.create({
   infoSubHeading: {
     fontSize: 14,
     paddingLeft: 12,
-    color: branding.colors.textDefault,
+    color: getBranding().colors.textDefault,
   },
 });

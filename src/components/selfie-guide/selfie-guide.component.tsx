@@ -3,7 +3,8 @@ import React from 'react';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalStyles} from '../../../globalStyles';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 const selfieGuide = '../../assets/selfieGuide.png';
 
@@ -11,11 +12,20 @@ const SelfieGuide = () => {
   return (
     <>
       <View style={styles.container}>
+
+      {getBranding().images?.selfie_guidance ? (
         <Image
-          source={require(selfieGuide)}
-          style={styles.image}
-          resizeMode="contain"
+        style={styles.image}
+        resizeMode="contain"
+          source={{uri: getBranding().images?.selfie_guidance}}
         />
+      ) : (
+        <Image      style={styles.image}
+        resizeMode="contain" source={require(selfieGuide)} />
+      )}
+
+
+     
       </View>
       <View style={styles.infoContainer}>
         <Text style={[styles.infoHeading, globalStyles.textBold]}>
@@ -25,14 +35,14 @@ const SelfieGuide = () => {
           <Icon
             name="ios-sunny"
             size={20}
-            color={branding.colors.textDefault}
+            color={getBranding().colors.textDefault}
           />
           <Text style={[styles.infoSubHeading, globalStyles.textMedium]}>
             Find an area with good lighting
           </Text>
         </View>
         <View style={styles.row}>
-          <Icon name="eye" size={20} color={branding.colors.textDefault} />
+          <Icon name="eye" size={20} color={getBranding().colors.textDefault} />
           <Text style={[styles.infoSubHeading, globalStyles.textMedium]}>
             Make sure your camera is at eye level
           </Text>

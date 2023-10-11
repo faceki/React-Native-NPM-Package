@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 
@@ -6,7 +6,8 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { VerificationProvider } from './src/provider/verification.context';
 import CarouselWrapper from './src/wrapper/carousel-wrapper';
 import { MultiDocumentKYCResponseClass, SingleDocumentKYCResponseClass } from './src/service/types/facekiresponse';
-
+import { Branding } from './src/service/types/interfaces';
+import {getBranding, updateBranding} from './src/branding'
 export type SlideType = { url: string; heading: string; subHeading: string };
 
 /**
@@ -43,10 +44,15 @@ type props = {
     fail: {
       heading: string;
       subHeading: string
+    },
+    verification:{
+      heading: string;
     }
-  }
+  },
+  branding?:Branding
 
 };
+
 function App({
   clientId,
   clientSecret,
@@ -55,14 +61,26 @@ function App({
   onError,
   onComplete,
   loadingURL,
-  allowSingleOverride,
+  allowSingleOverride=true,
   skipGuidanceScreens,
   consenttermofuseLink,
   skipFirstScreen,
   skipResultScreen,
   resultContent,
-  singleVerificationDoc
+  singleVerificationDoc,
+  branding
 }: props): JSX.Element {
+  useEffect(()=>{
+    if(!branding)
+    {
+      console.log("Using Default Branding")
+      branding  = getBranding()
+    }else{
+      updateBranding(branding)
+      console.log("Using Custom Branding")
+    }
+  },[branding])
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -83,6 +101,7 @@ function App({
         skipResultScreen={skipResultScreen}
         resultContent={resultContent}
         singleVerificationDoc={singleVerificationDoc}
+        branding={branding}
       >
         <StatusBar
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}

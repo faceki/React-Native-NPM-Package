@@ -164,7 +164,7 @@ const CarouselWrapper = ({slides, logoURL, loadingURL}: props) => {
           />
         );
       case 11:
-        return <Loading loadingURL={loadingURL} />;
+        return      <AnimationComponent verificationLoading={true} />;
 
       case 12:
         return <Confirmation finalResult={finalResult} />;

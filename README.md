@@ -123,7 +123,34 @@ Advance Usage
 
 ```jsx
 import FacekiApp from '@faceki/react-native-sdk';
+import { Branding } from '@faceki/react-native-sdk/src/service/types/interfaces';
 
+ const CustomBranding:Branding ={
+    colors: {
+      primary: '#F8B427',
+      secondary: '#343333',
+      buttonColor: 'rgba(253, 181, 40, 0.10)',
+      success: '#59C547',
+      danger: '#FF3B30',
+      warning: '#FF9500',
+      info: '#5AC8FA',
+      light: '#F5F5F5',
+      dark: '#1C1C1E',
+      background: '#f5f5f5',
+      backgroundSecondary: '#eeeeee',
+      backgroundCaptureBtn: '#F6F6F7',
+      textDefault: '#444343',
+      textSecondary: '#3E3E3E',
+      fontRegular:"Inter",
+      fontMedium:"Inter-Medium",
+      fontBold:"Inter-Bold"
+    },
+    images:{
+      card_guidance:"", //optional
+      selfie_guidance:"" //optional
+    }
+  }
+  
 <>
 
       <FacekiApp
@@ -160,6 +187,7 @@ import FacekiApp from '@faceki/react-native-sdk';
         skipResultScreen={true} // true | false (if you want to skip the result screen and manage your logic by onError or onComplete method)
         singleVerificationDoc="Driving License" (If you want to verify specific document with allowSingleOverride)
      
+      branding={CustomBranding}
 
       />
 </>;

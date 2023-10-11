@@ -3,7 +3,8 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {globalStyles} from '../../../globalStyles';
 import {styles} from './style';
-import branding from '../../branding';
+// import branding from '../../branding';
+import { getBranding } from '../../branding';
 
 type props = {
   onClick: () => void;
@@ -19,7 +20,7 @@ const FlipButton = ({onClick}: props) => {
       <Icon
         name="ios-camera-reverse"
         size={32}
-        // color={branding.colors.textDefault}
+        // color={getBranding().colors.textDefault}
         color={"white"}
       />
       <Text style={[styles.flipCamera, globalStyles.textRegular,{color:"white"}]}>

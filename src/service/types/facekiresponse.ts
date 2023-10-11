@@ -60,6 +60,7 @@ export class VerificationResultClass {
       public authentication: AuthenticationBreakdownClass,
       public aml: any[], // You can replace 'any' with a more specific type if available
       public responseID: string,
+      public requestId:string,
       public images: {
         doc_front_image: string;
         doc_back_image: string;
