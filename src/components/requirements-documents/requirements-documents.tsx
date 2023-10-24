@@ -67,13 +67,13 @@ const RequirementsDocuments = ({
           {documentSteps.map((item, index) => {
             return (
               <View key={index} style={[styles.box, {marginTop: 5}]}>
-                <Text style={{marginRight: 10}}> {index + 1}</Text>
+                <Text style={[{marginRight: 10},         globalStyles.textMedium]}> {index + 1}</Text>
                 {item.includes('selfie') ? (
                   <Image style={styles.tinyLogo} source={require(SELFIE)} />
                 ) : (
                   <Image style={styles.tinyLogo} source={require(IDCARDBACK)} />
                 )}
-                <Text>{item}</Text>
+                <Text style={         globalStyles.textMedium}>{item}</Text>
               </View>
             );
           })}
@@ -98,12 +98,12 @@ const RequirementsDocuments = ({
             checkedColor={getBranding().colors.primary}
           />
           {consenttermofuseLink && (
-            <Text style={styles.subHeading}>
+            <Text style={[styles.subHeading,         globalStyles.textMedium,]}>
               I confirm I have read, understood and agree to continue.
             </Text>
           )}
           {!consenttermofuseLink && (
-            <Text style={styles.subHeading}>
+            <Text style={[styles.subHeading,         globalStyles.textMedium,]}>
               I have read steps mentioned above
             </Text>
           )}

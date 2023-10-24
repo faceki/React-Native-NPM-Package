@@ -143,7 +143,7 @@ const CaptureSelfie = ({
               userStep={userStep}
             />
           </View>
-          <View style={styles.centerContainer}>
+          <View style={[styles.centerContainer,]}>
             <CaptureButton onClick={() => handleSingleCapturePhoto(userStep)} />
             <Text
               style={[

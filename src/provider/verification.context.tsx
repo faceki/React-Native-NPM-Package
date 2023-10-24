@@ -329,21 +329,43 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
     }
   }, [token]);
 
-  const handleSingleCapturePhoto = async (step: number) => {
+  const handleSingleCapturePhoto = async (step: number,image?:any,refOverride?:any) => {
     const allowedToAccessCamera = await checkCameraPermission();
-
+ 
     // if not allowed to access camera dont proceed
     if (!allowedToAccessCamera) {
       return;
     }
-    const imageSrc = await webcamRef?.current?.takePhoto?.({
-      enableShutterSound: false,
-      enableAutoStabilization: true,
-    });
+
+    if(!image)
+    {
+      if(webcamRef.current)
+      {
+        var imageSrc = await webcamRef?.current?.takePhoto?.({
+          enableShutterSound: false,
+          enableAutoStabilization: true,
+        });
+  
+  
+
+      }else{
+        var imageSrc = await refOverride?.current?.takePhoto?.({
+          enableShutterSound: false,
+          enableAutoStabilization: true,
+        });
+  
+  
+      }
+
+    }else{
+
+      var imageSrc = image
+    }
+  
 
 
 
-    if (imageSrc.path) {
+    if (imageSrc?.path) {
       if (step === 5) {
         setImgUrls(prev => ({
           ...prev,
@@ -577,8 +599,11 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
 
         return;
       }
+      if([5,7,10].includes(step))
+      {
+        setUserStep(prev => prev == step ?  (prev + 1) as userStepsType : prev);
 
-      setUserStep(prev => (prev + 1) as userStepsType);
+      }
     }
   };
 
@@ -626,6 +651,7 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   };
 
   const routeOfHandler = () => {
+
     if (userStep === 6 && selectedOption === 'Passport') {
       setUserStep(prev => (prev + 1) as userStepsType);
       moveForwardonlyIfNoLeftOption();

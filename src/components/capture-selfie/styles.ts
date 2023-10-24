@@ -86,6 +86,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 'auto',
+  
   },
   right: {
     width: width / 5,
