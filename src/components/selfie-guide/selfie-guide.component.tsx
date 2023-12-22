@@ -33,7 +33,7 @@ const SelfieGuide = () => {
         </Text>
         <View style={styles.row}>
           <Icon
-            name="ios-sunny"
+            name="sunny"
             size={20}
             color={getBranding().colors.textDefault}
           />

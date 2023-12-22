@@ -9,6 +9,7 @@ import { MultiDocumentKYCResponseClass, SingleDocumentKYCResponseClass } from '.
 import { Branding } from './src/service/types/interfaces';
 import {getBranding, updateBranding} from './src/branding'
 export type SlideType = { url: string; heading: string; subHeading: string };
+import Toast from 'react-native-toast-message';
 
 /**
  * An object containing the props for the KYC verification component.
@@ -49,7 +50,8 @@ type props = {
       heading: string;
     }
   },
-  branding?:Branding
+  branding?:Branding,
+  livenessScoreOverride?:number
 
 };
 
@@ -68,7 +70,8 @@ function App({
   skipResultScreen,
   resultContent,
   singleVerificationDoc,
-  branding
+  branding,
+  livenessScoreOverride
 }: props): JSX.Element {
   useEffect(()=>{
     if(!branding)
@@ -102,6 +105,7 @@ function App({
         resultContent={resultContent}
         singleVerificationDoc={singleVerificationDoc}
         branding={branding}
+        livenessScoreOverride={livenessScoreOverride}
       >
         <StatusBar
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
@@ -112,7 +116,10 @@ function App({
           logoURL={logoURL}
           loadingURL={loadingURL}
         />
+         
+
       </VerificationProvider>
+      <Toast />
     </SafeAreaView>
   );
 }

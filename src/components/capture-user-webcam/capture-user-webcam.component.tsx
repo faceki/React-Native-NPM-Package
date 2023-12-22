@@ -1,4 +1,4 @@
-import {Text, View, Pressable, Image} from 'react-native';
+import {Text, View, Pressable, Image, Platform, ActivityIndicator} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {styles} from './styles';
 
@@ -10,14 +10,17 @@ import {
   Camera,
   frameRateIncluded,
   useCameraDevices,
+  useFrameProcessor,
 } from 'react-native-vision-camera';
-import { getBranding } from '../../branding';
+import {getBranding} from '../../branding';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 type props = {
   webcamRef: React.MutableRefObject<any>;
-  handleSingleCapturePhoto: (step: number) => void;
+  handleSingleCapturePhoto: (step: number, image?: any,refOverride?:any) => void;
   userStep: number;
   skipGuidanceScreens?: boolean;
+  livenessScoreOverride?:number
   goBackUserSteps: (index?: number) => void;
   findOutStepContent: () => {
     step: number;
@@ -39,6 +42,8 @@ type props = {
  */
 import overlayImage from '../../assets/faceki-overlay-camera.png';
 import branding from '../../branding';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const CaptureUserWebcam = ({
   webcamRef,
@@ -47,12 +52,19 @@ const CaptureUserWebcam = ({
   goBackUserSteps,
   findOutStepContent,
   skipGuidanceScreens,
+  livenessScoreOverride
 }: props) => {
   const devices: any = useCameraDevices();
   const [device, setDevice] = useState(devices.back);
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(null);
+
+  const tets = useRef<any | null>(null);
+  var form: FormData | undefined;
   useEffect(() => {
     if (devices) {
       setDevice(devices.back);
+   
     }
   }, [devices]);
   const flipCamera = () => {
@@ -63,6 +75,109 @@ const CaptureUserWebcam = ({
     }
   };
 
+
+  useEffect(() => {
+    async function name() {
+  
+      try {
+        var te = await tets?.current?.takePhoto?.({
+          enableShutterSound: false,
+          // enableAutoStabilization: true,
+          qualityPrioritization: 'speed',
+        });
+
+        if (!te) {
+          // console.log('Photo capture failed');
+      
+          return;
+        }
+        if (!te.path) {
+          // console.log('Photo capture failed');
+          return;
+        }
+
+        form = new FormData();
+        form.append('image', {
+          uri: Platform.OS == "android" ? 'file://' + te?.path:  te?.path,
+          type: 'image/jpeg',
+          name: `photo_id_back_image.jpg`,
+        });
+
+        console.log(te?.path);
+      } catch (error) {
+        setTimeout(name, Platform.OS  == "android" ? 100 : 1500); // Retry after 700ms
+      }
+
+      try {
+        const response = await axios.post(
+          'https://addon.faceki.com/detect',
+          form,
+          {
+            headers: {'Content-Type': 'multipart/form-data'},
+          },
+        );
+        const objectsDetected = response?.data?.objects_detected?.length;
+        console.log(response?.data);
+
+        if (objectsDetected < 1) {
+          setTimeout(name, Platform.OS  == "android" ? 100 : 1500); // Retry after 700ms
+        } else {
+          handleSingleCapturePhoto(userStep, te);
+        }
+      } catch (error: any) {
+        console.error('API request failed:', JSON.stringify(error));
+        // Handle the error or retry if needed
+        setTimeout(name, Platform.OS  == "android" ? 100 : 1500); // Retry after 700ms
+      }
+    }
+    // setTimeout(() => {
+    //   name();
+    // }, 3000);
+  }, []);
+
+  const HandleCapture = async() =>{
+    // {userStep === 7 ? 'BACK SIDE' : 'FRONT SIDE'}
+    var te = await tets?.current?.takePhoto?.({
+      enableShutterSound: false,
+      // enableAutoStabilization: true,
+      qualityPrioritization: 'speed',
+    });
+
+    form = new FormData();
+    form.append('image', {
+      uri: Platform.OS == "android" ? 'file://' + te?.path:  te?.path,
+      type: 'image/jpeg',
+      name: `photo_id_back_image.jpg`,
+    });
+
+
+    const response = await axios.post(
+      'https://addon.faceki.com/advance/detect',
+      form,
+      {
+        headers: {'Content-Type': 'multipart/form-data'},
+      },
+    );
+
+
+
+    if(response.data?.liveness?.livenessScore && response.data?.liveness?.livenessScore > (livenessScoreOverride || 0.7))
+    {
+      setLoading(false);
+      handleSingleCapturePhoto(userStep, te);
+
+    }else{
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Please Try Again!',
+        text2: 'Captured image unable to pass quality check!'
+      });
+    }
+
+
+  }
+
   return (
     <View key="main" style={{flex: 1}}>
       {/* Camera Screen */}
@@ -72,9 +187,11 @@ const CaptureUserWebcam = ({
           style={[styles.overlayContainer, {flex: 1, width: '100%', zIndex: 1}]}
           device={device}
           isActive={true}
-          ref={webcamRef}
+          ref={tets}
           photo={true}
           video={true}
+          //   frameProcessor={frameProcessor}
+          // frameProcessorFps={"auto"}
         />
       )}
 
@@ -91,8 +208,13 @@ const CaptureUserWebcam = ({
           style={styles.overlayImage}
           resizeMode="cover"
         />
+        
       </View>
-
+      <Spinner
+          visible={loading}
+          textContent={'Analyzing...'}
+          textStyle={{color:"white"}}
+        />
       {/* Header Component */}
 
       <View key="topContent" style={styles.topContent}>
@@ -160,10 +282,15 @@ const CaptureUserWebcam = ({
             <FlipButton onClick={flipCamera} />
           </View>
           <View key={'capture'} style={styles.captureButtonWrapper}>
-            <CaptureButton onClick={() => handleSingleCapturePhoto(userStep)} />
+            <CaptureButton onClick={() =>{    setLoading(true); HandleCapture() }
+              // handleSingleCapturePhoto(userStep,null,tets)
+              
+              } />
           </View>
         </View>
       </View>
+
+
     </View>
   );
 };

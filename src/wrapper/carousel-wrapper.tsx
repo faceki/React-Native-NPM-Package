@@ -64,6 +64,7 @@ const CarouselWrapper = ({slides, logoURL, loadingURL}: props) => {
     consenttermofuseLink,
     skipFirstScreen,
     skipResultScreen,
+    livenessScoreOverride
   } = useMyStepsVerification();
 
   const content = (userStep: number) => {
@@ -107,6 +108,7 @@ const CarouselWrapper = ({slides, logoURL, loadingURL}: props) => {
             findOutStepContent={findOutStepContent}
             skipGuidanceScreens={skipGuidanceScreens}
             userStep={userStep}
+            livenessScoreOverride={livenessScoreOverride}
             key={'front'}
           />
         );

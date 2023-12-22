@@ -18,7 +18,7 @@ const FlipButton = ({onClick}: props) => {
       }
       onPress={onClick}>
       <Icon
-        name="ios-camera-reverse"
+        name="camera-reverse"
         size={32}
         // color={getBranding().colors.textDefault}
         color={"white"}
