@@ -230,11 +230,11 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
 
   const checkCameraPermission = async () => {
     const cameraPermission = await Camera.getCameraPermissionStatus();
-    if (cameraPermission != 'authorized') {
+    if (cameraPermission != 'granted') {
       const newCameraPermission = await Camera.requestCameraPermission();
       if (newCameraPermission === 'denied') await Linking.openSettings();
     }
-    return cameraPermission == 'authorized';
+    return cameraPermission == 'granted';
   };
 
   useEffect(() => {

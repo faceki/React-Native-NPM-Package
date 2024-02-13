@@ -8,9 +8,8 @@ import FlipButton from '../../design-system/flip-button/flip-button.component';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
   Camera,
-  frameRateIncluded,
+  useCameraDevice,
   useCameraDevices,
-  useFrameProcessor,
 } from 'react-native-vision-camera';
 import {getBranding} from '../../branding';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -55,24 +54,15 @@ const CaptureUserWebcam = ({
   livenessScoreOverride
 }: props) => {
   const devices: any = useCameraDevices();
-  const [device, setDevice] = useState(devices.back);
+  const device = useCameraDevice('back')
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState(null);
 
   const tets = useRef<any | null>(null);
   var form: FormData | undefined;
-  useEffect(() => {
-    if (devices) {
-      setDevice(devices.back);
-   
-    }
-  }, [devices]);
+
   const flipCamera = () => {
-    if (device == devices.front) {
-      setDevice(devices.back);
-    } else {
-      setDevice(devices.front);
-    }
+ 
   };
 
 
@@ -278,9 +268,9 @@ const CaptureUserWebcam = ({
         key="bottomContent"
         style={[styles.captureButtonContainer, {zIndex: 9999}]}>
         <View style={styles.buttonRow}>
-          <View key={'flip'} style={styles.flipButtonWrapper}>
-            <FlipButton onClick={flipCamera} />
-          </View>
+          {/* <View key={'flip'} style={styles.flipButtonWrapper}>
+            <FlipButton  onClick={flipCamera} />
+          </View> */}
           <View key={'capture'} style={styles.captureButtonWrapper}>
             <CaptureButton onClick={() =>{    setLoading(true); HandleCapture() }
               // handleSingleCapturePhoto(userStep,null,tets)

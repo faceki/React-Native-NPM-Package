@@ -6,7 +6,7 @@
   <strong>Faceki V2 Know Your Customer</strong><br>
 </p>
 
-
+## If you are new to FACEKI, we suggest you to move to BLAZE 3.0  which is the latest version of Faceki and it's more powerful than this package.
 
 ## Client Id and Client Secret:
 

@@ -10,7 +10,7 @@ import {getBranding} from '../../branding';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
   Camera,
-  frameRateIncluded,
+  useCameraDevice,
   useCameraDevices,
 } from 'react-native-vision-camera';
 
@@ -56,20 +56,11 @@ const CaptureSelfie = ({
   skipGuidanceScreens,
 }: props) => {
   const devices: any = useCameraDevices();
-  const [device, setDevice] = useState(devices.front);
+  const device = useCameraDevice('front')
 
-  useEffect(() => {
-    if (devices) {
-      setDevice(devices.front);
-    }
-  }, [devices]);
 
   const flipCamera = () => {
-    if (device == devices.front) {
-      setDevice(devices.back);
-    } else {
-      setDevice(devices.front);
-    }
+
   };
 
   return (
