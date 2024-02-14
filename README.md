@@ -7,6 +7,7 @@
 </p>
 
 ## If you are new to FACEKI, we suggest you to move to BLAZE 3.0  which is the latest version of Faceki and it's more powerful than this package.
+### Note: This PACKAGE will no longer get any update. We Suggest you to migrate if you are facing any issue. Contact us: https://wa.me/+13026131330
 
 ## Client Id and Client Secret:
 
@@ -234,3 +235,18 @@ npm i
 ```
 cd ios && pod install
 ```
+
+
+
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+
+## [2.0.7] - 13-02-2024
+### Changed
+- Upgraded React Vision Camera to V3
+
+## [2.0.6] - 22-12-2023
+### Changed
+- Added Quality/Liveness Check While Capturing
