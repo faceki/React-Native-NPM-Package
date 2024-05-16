@@ -27,27 +27,22 @@ export const getAccessTokenFacekiAPI = async (
   }
 };
 
-export const getKYCRulesAPI = async () => {
-  // https://kycdocv2.faceki.com/api-integration/verification-apis/get-kyc-rules
-  try {
-    const response = await api.get(`/kycrules/api/kycrules`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
 
-    return response?.data;
-  } catch (err) {
-    console.log('getKYCRulesAPI', err);
-    throw err;
-  }
+
+export const getKYCRulesAPI = async (url:any) => {
+   
+  return await  api.get('/kycverify/api/kycverify/validate-kyc-verify-link',{
+    params:{url}
+  }).then((res) => res.data).catch((err) => {
+    return err.message;
+  });
 };
 
 export const postMultiKYCVerificationAPI = async (body: FormData) => {
   try {
 
     const response = await api.post(
-      `/kycverify/api/kycverify/multi-kyc-verification`,
+      `/kycverify/api/kycverify/multiple-kyc-verification`,
       body,
       {
         headers: {
@@ -68,7 +63,7 @@ export const postSingleKYCVerificationAPI = async (body: FormData) => {
   try {
 
     const response = await api.post(
-      `/kycverify/api/kycverify/kyc-verification`,
+      `/kycverify/api/kycverify/request-kyc`,
       body,
       {
         headers: {

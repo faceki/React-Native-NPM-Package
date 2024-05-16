@@ -64,7 +64,6 @@ type ContextType = {
   allowedKycDocuments: string[];
   isChecked: boolean;
   handleCheckbox: () => void;
-  initializeClientIdAndSecret: (clientId: string, clientSecret: string) => void;
   loading: boolean;
   kycRuleError: boolean;
   allowSingle: boolean;
@@ -74,6 +73,7 @@ type ContextType = {
   skipResultScreen?: boolean;
   branding?:Branding
   livenessScoreOverride?:number,
+  skipFunc?:any,
   resultContent?: {
     success: {
       heading: string;
@@ -90,8 +90,7 @@ type ContextType = {
 };
 
 type VerificationProviderProps = PropsWithChildren<{
-  clientId: string;
-  clientSecret: string;
+  verification_url:string,
   onError: (
     message:
       | MultiDocumentKYCResponseClass
@@ -121,7 +120,8 @@ type VerificationProviderProps = PropsWithChildren<{
   };
   singleVerificationDoc?: 'Passport' | 'ID Card' | 'Driving License';
   branding?:Branding,
-  livenessScoreOverride?:number
+  livenessScoreOverride?:number,
+  skipFunc?:any
 }>;
 
 // Create the context
@@ -144,8 +144,7 @@ var RESULTS = [
 
 export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   children,
-  clientId,
-  clientSecret,
+  verification_url,
   onError,
   onComplete,
   allowSingleOverride,
@@ -156,7 +155,8 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   resultContent,
   singleVerificationDoc,
   branding,
-  livenessScoreOverride
+  livenessScoreOverride,
+  skipFunc
 
 }) => {
   const [userStep, setUserStep] = useState<userStepsType>(
@@ -166,10 +166,10 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   const [allowSingle, setAllowSingle] = useState(false);
   const [allowedKycDocuments, setAllowedKycDocuments] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
-  const [clientCredentials, setClientCredentials] = useState({
-    clientId: clientId,
-    clientSecret: clientSecret,
-  });
+  // const [clientCredentials, setClientCredentials] = useState({
+  //   clientId: clientId,
+  //   clientSecret: clientSecret,
+  // });
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [kycRuleError, setKycRuleError] = useState(false);
@@ -212,17 +212,7 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
     },
   });
 
-  const initializeClientIdAndSecret = (
-    clientId: string,
-    clientSecret: string,
-  ) => {
-    // function to be called by client library
-    setClientCredentials(prev => ({
-      ...prev,
-      clientId,
-      clientSecret,
-    }));
-  };
+
 
   useEffect(() => {
     checkCameraPermission();
@@ -238,50 +228,22 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
   };
 
   useEffect(() => {
-    if (!clientCredentials?.clientId) {
-      console.error('Please provide client id and secret for faceki kyc');
+    if (!verification_url) {
+      console.error('Please provide verification url for to start SDK');
     }
   }, []);
 
-  async function getToken() {
-    try {
-      const newToken = await getAccessTokenFacekiAPI(
-        clientCredentials.clientId,
-        clientCredentials.clientSecret,
-      );
 
-      setToken(newToken);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function getTokenWithoutGettingRules() {
-    // used to refresh the token so token hasnot expired
-    try {
-      await getAccessTokenFacekiAPI(
-        clientCredentials.clientId,
-        clientCredentials.clientSecret,
-      );
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-
-  useEffect(() => {
-    if (clientCredentials.clientId) {
-      getToken();
-    }
-  }, [clientCredentials]);
 
   useEffect(() => {
     async function getKYCRules() {
       try {
-        const rules = await getKYCRulesAPI();
 
+        console.log("EHHEre");
+        const rules = await getKYCRulesAPI(verification_url);
+  
         var {data} = rules;
-
+  
         const rulesRespose = {
           livenessCheckType: data.livenessCheckType,
           multiKYCEnabled: data.multiKYCEnabled,
@@ -310,14 +272,14 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         if (!singleVerificationDoc) {
           setSelectedOption(data.allowedKycDocuments?.[0]);
         }
-
+  
         if (allowSingleOverride) {
           setAllowSingle(allowSingleOverride);
         } else {
           setAllowSingle(data.allowSingle);
         }
         setLoading(false);
-
+  
         const copyLeftOptions = [...data.allowedKycDocuments];
         copyLeftOptions.shift(); // remove first element from an array
         setLeftOptions(copyLeftOptions);
@@ -326,11 +288,12 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         setKycRuleError(true);
       }
     }
-
-    if (token) {
-      getKYCRules();
+    if(verification_url)
+    {
+      getKYCRules()
     }
-  }, [token]);
+  
+  }, [verification_url]);
 
   const handleSingleCapturePhoto = async (step: number,image?:any,refOverride?:any) => {
     const allowedToAccessCamera = await checkCameraPermission();
@@ -471,8 +434,7 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
           });
 
           try {
-            // get token always incase token expires
-            await getTokenWithoutGettingRules();
+            formData.append("link", verification_url);
 
             const response = await postMultiKYCVerificationAPI(formData);
             // console.log({response});
@@ -549,10 +511,11 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
           {
             formData.append("selectedDoc",selectedOption)
           }
+          formData.append("link", verification_url);
 
           try {
             // get token always incase token expires
-            await getTokenWithoutGettingRules();
+     
             const response = await postSingleKYCVerificationAPI(formData);
             if (response?.responseCode === 0) {
               let responseWithType = Object.assign(
@@ -758,7 +721,6 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         routeOfHandler,
         isChecked,
         handleCheckbox,
-        initializeClientIdAndSecret,
         loading,
         kycRuleError,
         skipGuidanceScreens,
@@ -767,7 +729,8 @@ export const VerificationProvider: React.FC<VerificationProviderProps> = ({
         skipFirstScreen,
         branding,
         resultContent,
-        livenessScoreOverride
+        livenessScoreOverride,
+        skipFunc
 
       }}>
       {children}

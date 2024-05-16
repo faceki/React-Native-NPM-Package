@@ -13,6 +13,7 @@ import {
 } from 'react-native-vision-camera';
 import {getBranding} from '../../branding';
 import Spinner from 'react-native-loading-spinner-overlay';
+const Resizer = require('@bam.tech/react-native-image-resizer');
 
 type props = {
   webcamRef: React.MutableRefObject<any>;
@@ -133,6 +134,31 @@ const CaptureUserWebcam = ({
       qualityPrioritization: 'speed',
     });
 
+    try {
+      let result = await Resizer.default.createResizedImage(
+        (Platform.OS === 'android' ? 'file://' : '') + te.path,
+        1920,
+        1080,
+        'JPEG',
+        100,
+        0,
+        undefined,
+        false,
+        {
+          mode: 'contain',
+          onlyScaleDown: true,
+        },
+      );
+      console.log(result);
+      te = result;
+      // setResizedImage(result);
+    } catch (error) {
+      console.log(error);
+      // Alert.alert('Unable to resize the photo');
+    }
+
+
+
     form = new FormData();
     form.append('image', {
       uri: Platform.OS == "android" ? 'file://' + te?.path:  te?.path,
@@ -149,7 +175,7 @@ const CaptureUserWebcam = ({
       },
     );
 
-
+      console.log(response.data)
 
     if(response.data?.liveness?.livenessScore && response.data?.liveness?.livenessScore > (livenessScoreOverride || 0.7))
     {

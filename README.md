@@ -27,7 +27,10 @@ Please make sure to keep your client ID and secret secure, as they are used to a
 npm i @faceki/react-native-sdk
 npm i react-native-vision-camera
 npm i lottie-react-native
+npm i @bam.tech/react-native-image-resizer@3.0.7
 ```
+
+This SDK is tested with @bam.tech/react-native-image-resizer version 3.0.7, you can use latest if doesn't work. Kindly use version 3.0.7
 
 
 
@@ -107,13 +110,19 @@ cd ios && pod install && cd ..
 
 ## USAGE
 
+You would need to generate EKYC Link through the API here:
+
+https://docs.faceki.com/api-integration/verification-apis/generate-kyc-link
+
+In the response use the key "data" to initiate the SDK
+
+
 ```jsx
 import FacekiApp from '@faceki/react-native-sdk';
 
 <>
   <FacekiApp
-    clientId="######################"
-    clientSecret="######################"
+    verification_url="XXXX-XXXX-xxxX-XxXXX"
     onError={onError}
     onComplete={onComplete}
   />
@@ -155,8 +164,7 @@ import { Branding } from '@faceki/react-native-sdk/src/service/types/interfaces'
 <>
 
       <FacekiApp
-        clientId={"########"}
-        clientSecret={"############"}
+        verification_url="XXXX-XXXX-xxxX-XxXXX"
         onError={(error) => { console.log("ERROR", error) }}
         onComplete={(data) => {
 
@@ -187,8 +195,12 @@ import { Branding } from '@faceki/react-native-sdk/src/service/types/interfaces'
         skipGuidanceScreens={true} // true | false (if you want to hide the guidance screens)
         skipResultScreen={true} // true | false (if you want to skip the result screen and manage your logic by onError or onComplete method)
         singleVerificationDoc="Driving License" (If you want to verify specific document with allowSingleOverride)
-     
-      branding={CustomBranding}
+        branding={CustomBranding}
+        skipFunc={
+          ()=>{
+            /// Logic To Skip SDK or Navigate
+          }
+        }
 
       />
 </>;
@@ -242,6 +254,14 @@ cd ios && pod install
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.9] - 16-05-2024
+### Changed
+- README UPDATES
+
+## [2.0.8] - 16-05-2024
+### Changed
+- Remove Client ID and Secret, replaced with Verification LINK
+- Added SKIP button in header
 
 ## [2.0.7] - 13-02-2024
 ### Changed

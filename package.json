@@ -1,7 +1,7 @@
 {
   "name": "@faceki/react-native-sdk",
   "description": "Faceki KYC React Native Plugins",
-  "version": "2.0.7",
+  "version": "2.0.9",
   "private": false,
   "source": "App",
   "main": "App.tsx",
@@ -27,6 +27,7 @@
     "clean": "cd ios && rm -rf Pods && rm -rf Podfile.lock && pod deintegrate && pod cache clean --all && cd .."
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.7",
     "@react-native-firebase/app": "^18.3.2",
     "@react-native-firebase/ml": "^18.3.2",
     "@react-native-masked-view/masked-view": "^0.2.9",

@@ -2,10 +2,12 @@ import React from 'react';
 import {View, Image, Text, Pressable} from 'react-native';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/Octicons';
+
 // import branding from '../../branding';
 import {globalStyles} from '../../../globalStyles';
-import { getBranding } from '../../branding';
-
+import {getBranding} from '../../branding';
+import {useMyStepsVerification} from '../../provider/verification.context';
 
 const LOGO = '../../assets/logo.png';
 
@@ -38,18 +40,55 @@ function Header({
   allowSingle,
   skipFirstScreen,
 }: props) {
+  const context = useMyStepsVerification();
+
   return (
     <>
       {userStep !== 10 && userStep !== 11 && userStep !== 12 && (
         <>
-          {userStep === 1 && (
-            <View style={styles.center}>
-              {/* <Image style={styles.tinyLogo} source={require(LOGO)} /> */}
-              <Text style={[styles.heading, globalStyles.textMedium]}>
-                {findOutStepContent()?.heading}
-              </Text>
-            </View>
-          )}
+          {userStep === 1 &&
+            (!context.skipFunc ? (
+              <View style={styles.center}>
+                {/* <Image style={styles.tinyLogo} source={require(LOGO)} /> */}
+                <Text style={[styles.heading, globalStyles.textMedium]}>
+                  {findOutStepContent()?.heading}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                }}>
+                {/* <Image style={styles.tinyLogo} source={require(LOGO)} /> */}
+                <Text></Text>
+                <Text
+                  style={[
+                    styles.heading,
+                    globalStyles.textMedium,
+                    {marginLeft: '10%'},
+                  ]}>
+                  {findOutStepContent()?.heading}
+                </Text>
+                <Pressable
+                  onPress={() => {
+                    context.skipFunc();
+                  }}>
+                  <Text
+                    style={[
+                      {
+                        lineHeight: 58,
+                        letterSpacing: 0,
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                      },
+                      globalStyles.textMedium,
+                    ]}>
+                    Skip
+                  </Text>
+                </Pressable>
+              </View>
+            ))}
           {userStep !== 1 && (
             <View style={styles.container}>
               <Pressable
@@ -83,14 +122,35 @@ function Header({
                 </Text>
               </View>
 
-              <Pressable style={({pressed}) => pressed && styles.opacity}>
-                <Icon
-                  name="information-circle-outline"
-                  size={30}
-                  style={{opacity: 0}}
-                  color={getBranding().colors.textDefault}
-                />
-              </Pressable>
+              {!context.skipFunc ? (
+                <Pressable style={({pressed}) => pressed && styles.opacity}>
+                  <Icon
+                    name="information-circle-outline"
+                    size={30}
+                    style={{opacity: 0}}
+                    color={getBranding().colors.textDefault}
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={[{flexDirection: 'row'}]}
+                  onPress={() => {
+                    context.skipFunc();
+                  }}>
+                  <Text
+                    style={[
+                      {
+                        lineHeight: 58,
+                        letterSpacing: 0,
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                      },
+                      globalStyles.textMedium,
+                    ]}>
+                    Skip
+                  </Text>
+                </Pressable>
+              )}
             </View>
           )}
         </>

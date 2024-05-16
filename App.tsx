@@ -24,8 +24,7 @@ import Toast from 'react-native-toast-message';
  */
 
 type props = {
-  clientId: string;
-  clientSecret: string;
+  verification_url: string;
   logoURL?: string;
   loadingURL?: string;
   slides?: SlideType[];
@@ -51,13 +50,13 @@ type props = {
     }
   },
   branding?:Branding,
-  livenessScoreOverride?:number
+  livenessScoreOverride?:number,
+  skipFunc?:any
 
 };
 
 function App({
-  clientId,
-  clientSecret,
+  verification_url,
   logoURL,
   slides,
   onError,
@@ -71,7 +70,8 @@ function App({
   resultContent,
   singleVerificationDoc,
   branding,
-  livenessScoreOverride
+  livenessScoreOverride,
+  skipFunc
 }: props): JSX.Element {
   useEffect(()=>{
     if(!branding)
@@ -93,8 +93,7 @@ function App({
   return (
     <SafeAreaView style={backgroundStyle}>
       <VerificationProvider
-        clientId={clientId}
-        clientSecret={clientSecret}
+        verification_url={verification_url}
         onError={onError}
         onComplete={onComplete}
         allowSingleOverride={allowSingleOverride}
@@ -106,6 +105,7 @@ function App({
         singleVerificationDoc={singleVerificationDoc}
         branding={branding}
         livenessScoreOverride={livenessScoreOverride}
+        skipFunc={skipFunc}
       >
         <StatusBar
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
