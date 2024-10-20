@@ -9,14 +9,14 @@ const availableHeight = height - statusBarHeight;
 
 const containerHeight = Platform.OS === 'ios' ? availableHeight / 1.1 : height;
 
-export const styles = StyleSheet.create({
+export const styles:any = StyleSheet.create({
   wrapper: {
     backgroundColor: 'red',
   },
   mainContainer: {
     height: containerHeight,
     padding: 24,
-    overflowY: 'scroll',
+    overflow: 'scroll',
     display: 'flex',
     position: 'relative',
     backgroundColor: getBranding().colors.background,
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   },
   cameraContainer: {
     height: Dimensions.get('screen').height / 1.04,
-    overflowY: 'scroll',
+    overflow: 'scroll',
     display: 'flex',
     position: 'relative',
     backgroundColor: getBranding().colors.background,
