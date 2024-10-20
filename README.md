@@ -9,6 +9,8 @@
 ## If you are new to FACEKI, we suggest you to move to BLAZE 3.0  which is the latest version of Faceki and it's more powerful than this package.
 ### Note: This PACKAGE will no longer get any update. We Suggest you to migrate if you are facing any issue. Contact us: https://wa.me/+13026131330
 
+# END OF LIFE AUG 2024
+
 ## Client Id and Client Secret:
 
 To obtain a client ID and secret for using our API, you will need to create an account on the Faceki dashboard by visiting the following URL: https://apps.faceki.com/.
@@ -253,6 +255,9 @@ cd ios && pod install
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [2.1.1] - 20-10-2024
+### Changed
+- END OF LIFE FINAL UPDATE FOR IMAGE SIZE.
 
 ## [2.0.9] - 16-05-2024
 ### Changed
